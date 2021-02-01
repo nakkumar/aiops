@@ -1,0 +1,9 @@
+jenkins 
+********
+
+scp $WORKSPACE/memory-centos.sh root@192.168.4.115:/root/
+ssh root@192.168.4.115 "cd /root && bash memory-centos.sh"
+
+scp $WORKSPACE/memory-ubuntu.sh root@192.168.4.244:/root/
+ssh root@192.168.4.244 "cd /root && bash memory-ubuntu.sh"
+
