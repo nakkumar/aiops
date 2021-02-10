@@ -20,3 +20,5 @@ example:
 ********
 fsutil file createnew test.txt 52428800  ---> it will create a 50MB test.txt file
  
+size x 1024 x 1024 
+50(mb) x 1024 x 1024 = 52428800
