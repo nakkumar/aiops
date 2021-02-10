@@ -2,7 +2,21 @@ memory increase (90%)
 *********************
  stress-ng --vm-bytes $(awk '/MemAvailable/{printf "%d\n", $2 * 0.9;}' < /proc/meminfo)k --vm-keep -m 1
  
- disk stress
- ***********
- fallocate -l 50G big_file
+ linux dummy high volum file creation
+ *************************************
+ syntax: 
+********
+ fallocate -l (size od the file) (file_name)
+ example:
+********
+ fallocate -l 50G big_file    
+ 
+ Windows dummy high volum file creation
+ **************************************
+syntax: 
+********
+fsutil file createnew filename length
+example:
+********
+fsutil file createnew test.txt 52428800  ---> it will create a 50MB test.txt file
  
