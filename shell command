@@ -22,3 +22,8 @@ fsutil file createnew test.txt 52428800  ---> it will create a 50MB test.txt fil
  
 size x 1024 x 1024 
 50(mb) x 1024 x 1024 = 52428800
+
+install locate
+***************
+yum install mlocate -y 
+sudo updatedb && locate -e bench-repo
