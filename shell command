@@ -33,3 +33,10 @@ web-response
 curl -s -w 'Testing Website Response Time for :%{url_effective}\n\nLookup Time:\t\t%{time_namelookup}\nConnect Time:\t\t%{time_connect}\nPre-transfer Time:\t%{time_pretransfer}\nStart-transfer Time:\t%{time_starttransfer}\n\nTotal Time:\t\t%{time_total}\n' -o /dev/null http://192.168.4.115/demo.php
 
 websit url ---> http://192.168.4.115/demo.php
+
+stree the website
+******************
+ab -kc 10 -t 30 http://192.168.4.115/demo.php
+
+websit url ---> http://192.168.4.115/demo.php
+
