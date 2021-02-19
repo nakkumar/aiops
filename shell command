@@ -42,3 +42,8 @@ ab -c 100 -n 100 -r -t 30 http://192.168.4.115/demo.php
 -t 30 --> time
 websit url ---> http://192.168.4.115/demo.php
 
+check the web response time
+****************************
+curl -s -w %{time_total}\\n -o /dev/null http://192.168.4.115/demo.php
+
+websit url ---> http://192.168.4.115/demo.php
