@@ -37,6 +37,8 @@ websit url ---> http://192.168.4.115/demo.php
 stree the website
 ******************
 ab -kc 10 -t 30 http://192.168.4.115/demo.php
+ab -c 100 -n 100 -r -t 30 http://192.168.4.115/demo.php
 
+-t 30 --> time
 websit url ---> http://192.168.4.115/demo.php
 
