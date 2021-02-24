@@ -32,6 +32,26 @@ web-response
 ************
 curl -s -w 'Testing Website Response Time for :%{url_effective}\n\nLookup Time:\t\t%{time_namelookup}\nConnect Time:\t\t%{time_connect}\nPre-transfer Time:\t%{time_pretransfer}\nStart-transfer Time:\t%{time_starttransfer}\n\nTotal Time:\t\t%{time_total}\n' -o /dev/null http://192.168.4.115/demo.php
 
+web-response windows
+*********************
+$url = 'http://www.powershell.com'
+
+
+# track execution time:
+$timeTaken = Measure-Command -Expression {
+  $site = Invoke-WebRequest -Uri $url
+}
+
+$milliseconds = $timeTaken.TotalMilliseconds
+
+$milliseconds = [Math]::Round($milliseconds, 1)
+
+"This took $milliseconds ms to execute"
+
+
+
+
+
 websit url ---> http://192.168.4.115/demo.php
 
 stree the website
