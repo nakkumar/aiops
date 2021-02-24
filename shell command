@@ -68,10 +68,38 @@ curl -s -w %{time_total}\\n -o /dev/null http://192.168.4.115/demo.php
 
 websit url ---> http://192.168.4.115/demo.php
 
-httperf installation
-*********************
+######################################################################################################################################
+
+httperf for installation centos
+*******************************
 wget http://ftp.tu-chemnitz.de/pub/linux/dag/redhat/el7/en/x86_64/rpmforge/RPMS/rpmforge-release-0.5.3-1.el7.rf.x86_64.rpm
 
 rpm -Uvh rpmforge-release-0.5.3-1.el7.rf.x86_64.rpm
 
 yum install httperf
+
+httperf installation for ubuntu
+********************************
+$ git clone https://github.com/httperf/httperf.git
+$ cd httperf
+# read Readme.md
+$ sudo yum install automake openssl-devel libtool
+$ libtoolize --force
+$ autoreconf -i
+$ automake
+$ ./configure
+$ make
+$ sudo make install
+
+Verify Build ---> 
+$ httperf -v | grep open
+It will show something like: --->
+httperf: maximum number of open descriptors = 500000
+
+command 
+*******
+httperf --server 192.168.4.244 --uri /demo.php --num-conn 20 --num-cal 10 --rate 2 --timeout 5
+
+web-page : http://192.168.4.244/demo.php
+
+##############################################################################################################################################
