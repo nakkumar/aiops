@@ -12,3 +12,8 @@ windows node
 *************
 username: Administrator
 passwd: Testing@123456
+
+splunk
+******
+username: zippyops
+passwd: Zippyops@123
