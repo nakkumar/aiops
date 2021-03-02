@@ -56,6 +56,8 @@ websit url ---> http://192.168.4.115/demo.php
 
 stree the website
 ******************
+good --> ab -kc 100 -t 30 http://192.168.4.22/demo.php
+
 ab -kc 10 -t 30 http://192.168.4.115/demo.php
 ab -c 100 -n 100 -r -t 30 http://192.168.4.115/demo.php
 
