@@ -105,3 +105,8 @@ httperf --server 192.168.4.244 --uri /demo.php --num-conn 20 --num-cal 10 --rate
 web-page : http://192.168.4.244/demo.php
 
 ##############################################################################################################################################
+
+clear buffer cache in linux
+***************************
+sync; echo 3 > /proc/sys/vm/drop_caches 
+
