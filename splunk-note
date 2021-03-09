@@ -1,0 +1,7 @@
+download the zip
+*****************
+step1: https://splunkbase.splunk.com/app/4192/
+
+step2: setting ---> install app form file ---> (select the zip and upload )
+
+step3: manage apps ---> Splunk Metrics Workspace ---> (launch the spp)
