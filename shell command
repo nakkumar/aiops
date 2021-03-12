@@ -113,3 +113,13 @@ sync; echo 3 > /proc/sys/vm/drop_caches
 cpu utilization monitoring
 *************************
 cat <(grep 'cpu ' /proc/stat) <(sleep 1 && grep 'cpu ' /proc/stat) | awk -v RS="" '{print ($13-$2+$15-$4)*100/($13-$2+$15-$4+$16-$5)}'
+
+
+mail
+****
+set from=xxxxxxxxxx@zippyops.in
+set smtp=smtp://mail.zippyops.in:25
+set smtp-auth=login
+set smtp-auth-user=xxxxxx@zippyops.in
+set smtp-auth-password=xxxxxxxxxx
+set ssl-verify=ignore
