@@ -1,3 +1,9 @@
 compile
 ********
 /usr/local/nagios/bin/nagios -v /usr/local/nagios/etc/nagios.cfg
+
+
+node
+****
+plugin ---> /usr/lib64/nagios/plugins/
+ --> /etc/nagios/nrpe.cfg
