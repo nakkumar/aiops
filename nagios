@@ -2,8 +2,11 @@ compile
 ********
 /usr/local/nagios/bin/nagios -v /usr/local/nagios/etc/nagios.cfg
 
-
 node
 ****
-plugin ---> /usr/lib64/nagios/plugins/
- --> /etc/nagios/nrpe.cfg
+plugin ---> cd /usr/lib64/nagios/plugins/
+ -->        vi /etc/nagios/nrpe.cfg
+ 
+ emai-configuration
+ ******************* 
+ vi /usr/local/nagios/etc/objects/contacts.cfg
