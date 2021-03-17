@@ -10,3 +10,8 @@ plugin ---> cd /usr/lib64/nagios/plugins/
  emai-configuration
  ******************* 
  vi /usr/local/nagios/etc/objects/contacts.cfg
+ 
+ 
+ ubuntu
+ ********
+ systemctl restart nagios-nrpe-server
