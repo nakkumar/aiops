@@ -36,6 +36,49 @@ if __name__ == '__main__':
     cpu_usage = int(cpu_usage)
     functionA(cpu_usage)
 
-#################################################################################################################################################################################
+############################################
+
+cpu persentage %
+****************
+
+
+#!/usr/bin/python3
+
+import os
+import psutil
+import wmi, sys, requests
+
+def functionA(cpu_percent):
+    if cpu_percent<=50:
+        print ( "OK - CPU Usage",cpu_percent,"%")
+        sys.exit(0)
+    elif 51<=cpu_percent & cpu_percent<=80:
+        print ( "WARNING - CPU Usage",cpu_percent,"%")
+        sys.exit(1)
+    elif 81<=cpu_percent & cpu_percent<=100:
+        print ( "CRICTICAL - CPU Usage",cpu_percent,"%"  )
+        headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'X-Rundeck-Auth-Token': 'NSUt9PpUTTJ6INH7xcjt09VyMcr8cexX',
+        }
+        data = '{"argString":"-servername windows-ser-com -filesystem redhat "}'
+        response = requests.post('http://192.168.5.116:4440/api/16/job/66a9bc34-8c3e-4bb9-87f8-f3b4923cb746/executions', headers=headers, data=data)
+        sys.exit(2)
+    else:
+        print ( "UKNOWN  - CPU Usage",cpu_percent,"%")
+        sys.exit(3)
+
+    print ("Good bye!")
+
+if __name__ == '__main__':
+    
+    cpu_percent = psutil.cpu_percent()
+    cpu_percent = int(cpu_percent)
+    functionA(cpu_percent)
+
+######################################################
+
+
 
 
