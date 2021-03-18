@@ -1,5 +1,6 @@
 cpu
 ***
+#$total=Get-WmiObject Win32_Processor | Measure-Object -Property LoadPercentage -Average | Select Average | ft -HideTableHeaders
 $total=(Get-Counter '\Processor(_Total)\% Processor Time').CounterSamples.CookedValue
 if($total -ge 0 -and $total -le 50){
    Write-Output("OK - Usage of $total Bytes Services in OK State")
@@ -13,6 +14,10 @@ if($total -ge 0 -and $total -le 50){
    C:\Python\Python37\python.exe C:\Users\cpu_ioload.py
    Write-Output("CRITICAL - Usage of $total Bytes Services in CRITICAL State")
    exit 2
+}
+ else{
+   Write-Output("UNKNOWN - Usage of $total Bytes Services in UNKNOWN State")
+   exit 3
 }
 
 Cpu rundeck trigger python
