@@ -1,0 +1,16 @@
+cpu
+***
+$total=(Get-Counter '\Processor(_Total)\% Processor Time').CounterSamples.CookedValue
+if($total -ge 0 -and $total -le 50){
+   Write-Output("OK - Usage of $total Bytes Services in OK State")
+   exit 0
+} elseif($total -ge 51 -and $total -le 70){
+   C:\Python\Python37\python.exe C:\Users\cpu_ioload.py
+   Write-Output("WARNING - Usage of $total Bytes Services in WARNING State")
+   exit 1
+}
+ elseif($total -ge 71 ){
+   C:\Python\Python37\python.exe C:\Users\cpu_ioload.py
+   Write-Output("CRITICAL - Usage of $total Bytes Services in CRITICAL State")
+   exit 2
+}
