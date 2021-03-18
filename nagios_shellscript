@@ -1,0 +1,25 @@
+cpu
+***
+
+#!/bin/bash
+
+countWarnings=$( top -b -n2 -p 1 | fgrep "Cpu(s)" | tail -1 | awk  '{ print $2 }' )
+
+if (( ${countWarnings%%.*}<=30 )); then
+                echo "OK - CPU Usage of ${countWarnings%%.*} % Service in Okay State"
+                exit 0
+        elif (( 40<=${countWarnings%%.*} && ${countWarnings%%.*}<=50 )); then
+                echo "WARNING - CPU Usage of ${countWarnings%%.*} % Service in Warning State"
+                exit 1
+        elif (( 51<=${countWarnings%%.*} && ${countWarnings%%.*}<=100 )); then
+                echo "CRITICAL - CPU Usage of ${countWarnings%%.*} % Service in Critical State"
+                curl -D - \
+                -X "POST" -H "Accept: application/json" \
+                -H "Content-Type: application/json" \
+                -H "X-Rundeck-Auth-Token: NSUt9PpUTTJ6INH7xcjt09VyMcr8cexX" \
+                http://192.168.5.116:4440/api/16/job/576f20ae-5431-43b2-97da-1fd188ba00d5/executions
+                exit 2
+        else
+                echo "UNKNOWN - ${countWarnings%%.*}"
+                exit 3
+fi
