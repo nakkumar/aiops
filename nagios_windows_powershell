@@ -19,6 +19,9 @@ if($total -ge 0 -and $total -le 50){
    Write-Output("UNKNOWN - Usage of $total Bytes Services in UNKNOWN State")
    exit 3
 }
+C:\Python\Python37\python.exe C:\Users\cpu_utilization.py
+
+###########################################################################
 
 Cpu rundeck trigger python
 ***************************
