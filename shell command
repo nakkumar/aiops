@@ -123,3 +123,7 @@ set smtp-auth=login
 set smtp-auth-user=xxxxxx@zippyops.in
 set smtp-auth-password=xxxxxxxxxx
 set ssl-verify=ignore
+
+windows_cpu_command
+********************
+(Get-Counter '\Processor(_Total)\% Processor Time').CounterSamples.CookedValue
