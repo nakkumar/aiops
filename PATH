@@ -1,0 +1,2 @@
+zabbix server -------->  /usr/lib/zabbix/externalscripts ---> trigger the rundeck   
+runedck ----> /var/lib/rundeck/zippyops/zabbix  -----> windows script execution
