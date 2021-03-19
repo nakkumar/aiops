@@ -2,6 +2,8 @@ CPU
 ***
 UBUNTU
 ******
+--->ubuntu@pocrundeckubuntu:/usr/lib/nagios/plugins$ cat cpu_utilization.sh
+
 #!/bin/bash
 
 countWarnings=$(top -b -n2 -p 1 | fgrep "Cpu(s)" | tail -1 | awk  '{ print $2 }')
@@ -27,6 +29,8 @@ fi
 
 CENTOS
 ******
+--->[root@pocrundeckcentos plugins]# cat cpu_utilization.sh
+
 #!/bin/bash
 
 countWarnings=$(top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print 100 - $1"%"}' | sed 's/%//g')
@@ -54,6 +58,7 @@ WINDOWS
 *******
 powershell
 **********
+---> check_cpu_utilization.ps1
 
 #$total=Get-WmiObject Win32_Processor | Measure-Object -Property LoadPercentage -Average | Select Average | ft -HideTableHeaders
 $total=(Get-Counter '\Processor(_Total)\% Processor Time').CounterSamples.CookedValue
@@ -77,6 +82,8 @@ if($total -ge 0 -and $total -le 30){
 
 python 
 ******
+---> cpu_utilization.py
+
 #!/usr/bin/python3
 
 import os
