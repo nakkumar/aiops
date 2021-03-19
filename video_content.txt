@@ -1,7 +1,0 @@
-Nagios, is a free and open-source computer-software application that monitors systems, networks and infrastructure. 
-
-Rundeck is runbook automation that gives you and your colleagues self-service access to the processes and tools they need to get their job done.
-
-Jenkins is a free and open source automation server. It helps automate the parts of software development related to building, testing, and deploying, facilitating continuous integration and continuous delivery.
-
-Gitlab is a opensource source code management tool. It can be used to store and retrieve data  any where at any time.
