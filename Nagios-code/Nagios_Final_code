@@ -1,0 +1,138 @@
+Nagios-powershell-memory
+*************************
+
+$totmem =  systeminfo  | Select-String -Pattern "Total Physical Memory"
+$totmem1 = $totmem -replace '\s',''
+$totmem2 = $totmem1 | ForEach-Object {$_ -Replace "[^0-9]", ""}
+#Write-Output("$totmem2")
+
+$avamem =  systeminfo  | Select-String -Pattern "Available Physical Memory"
+$avamem1 = $avamem -replace '\s',''
+$avamem2 = $avamem1 | ForEach-Object {$_ -Replace "[^0-9]", ""}
+#Write-Output("$avamem2")
+
+
+$usemem = $totmem2-$avamem2
+#Write-Output("$usemem")
+
+$total = ($usemem/$totmem2)*100
+#Write-Output("$per")
+
+if($total -ge 0 -and $total -le 50){
+   Write-Output("OK - Usage of $total Bytes Services in OK State")
+   exit 0
+} elseif($total -ge 51 -and $total -le 70){
+  C:\Python\Python37\python.exe C:\Users\memoryusage.py
+   Write-Output("WARNING - Usage of $total Bytes Services in WARNING State")
+   exit 1
+}
+ elseif($total -ge 71 ){
+   C:\Python\Python37\python.exe C:\Users\memoryusage.py
+   Write-Output("CRITICAL - Usage of $total Bytes Services in CRITICAL State")
+   exit 2
+}
+ else{
+   Write-Output("UNKNOWN - Usage of $total Bytes Services in UNKNOWN State")
+   exit 3
+}
+
+Nagios-python-Rundeck
+*********************
+
+#!/usr/bin/python3
+
+import os
+import psutil
+import wmi, sys, requests
+
+def functionA(memory):
+    
+
+		
+        headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'X-Rundeck-Auth-Token': 'NSUt9PpUTTJ6INH7xcjt09VyMcr8cexX',
+        }
+        data = '{"argString":"-servername windows-ser-com -filesystem redhat "}'
+        response = requests.post('http://192.168.5.116:4440/api/16/job/7b90f601-61e8-4719-ad53-5f449a7175b9/executions', headers=headers, data=data)
+       
+
+
+if __name__ == '__main__':
+    
+    memory = psutil.virtual_memory().percent
+    memory = int(memory)
+    functionA(memory)
+
+###############################################################################################################################################################################
+
+Nagios-powershell-cpu
+**********************
+
+$totmem =  systeminfo  | Select-String -Pattern "Total Physical Memory"
+$totmem1 = $totmem -replace '\s',''
+$totmem2 = $totmem1 | ForEach-Object {$_ -Replace "[^0-9]", ""}
+#Write-Output("$totmem2")
+
+$avamem =  systeminfo  | Select-String -Pattern "Available Physical Memory"
+$avamem1 = $avamem -replace '\s',''
+$avamem2 = $avamem1 | ForEach-Object {$_ -Replace "[^0-9]", ""}
+#Write-Output("$avamem2")
+
+
+$usemem = $totmem2-$avamem2
+#Write-Output("$usemem")
+
+$total = ($usemem/$totmem2)*100
+Write-Output("$per")
+
+if($total -ge 0 -and $total -le 30){
+   Write-Output("OK - Usage of $total Bytes Services in OK State")
+   exit 0
+} elseif($total -ge 31 -and $total -le 40){
+#  C:\Python\Python37\python.exe C:\Users\cpu_utilization.py
+   Write-Output("WARNING - Usage of $total Bytes Services in WARNING State")
+   exit 1
+}
+ elseif($total -ge 41 ){
+#   C:\Python\Python37\python.exe C:\Users\cpu_utilization.py
+   Write-Output("CRITICAL - Usage of $total Bytes Services in CRITICAL State")
+   exit 2
+}
+ else{
+   Write-Output("UNKNOWN - Usage of $total Bytes Services in UNKNOWN State")
+   exit 3
+}
+
+Nagios-python-Rundeck
+*********************
+
+#!/usr/bin/python3
+
+import os
+import psutil
+import wmi, sys, requests
+
+def functionA(cpu_percent):
+    
+
+		
+        headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'X-Rundeck-Auth-Token': 'NSUt9PpUTTJ6INH7xcjt09VyMcr8cexX',
+        }
+        data = '{"argString":"-servername windows-ser-com -filesystem redhat "}'
+        response = requests.post('http://192.168.5.116:4440/api/16/job/66a9bc34-8c3e-4bb9-87f8-f3b4923cb746/executions', headers=headers, data=data)
+        
+
+
+if __name__ == '__main__':
+    
+    cpu_percent = psutil.cpu_percent()
+    cpu_percent = int(cpu_percent)
+    functionA(cpu_percent)
+    
+##################################################################################################################################################################    
+
