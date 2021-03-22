@@ -1,3 +1,44 @@
+Powershell code for memory
+**************************
+
+$totmem =  systeminfo  | Select-String -Pattern "Total Physical Memory"
+$totmem1 = $totmem -replace '\s',''
+$totmem2 = $totmem1 | ForEach-Object {$_ -Replace "[^0-9]", ""}
+#Write-Output("$totmem2")
+
+$avamem =  systeminfo  | Select-String -Pattern "Available Physical Memory"
+$avamem1 = $avamem -replace '\s',''
+$avamem2 = $avamem1 | ForEach-Object {$_ -Replace "[^0-9]", ""}
+#Write-Output("$avamem2")
+
+
+$usemem = $totmem2-$avamem2
+#Write-Output("$usemem")
+
+$total = ($usemem/$totmem2)*100
+Write-Output("$per")
+
+if($total -ge 0 -and $total -le 30){
+   Write-Output("OK - Usage of $total Bytes Services in OK State")
+   exit 0
+} elseif($total -ge 31 -and $total -le 40){
+#  C:\Python\Python37\python.exe C:\Users\cpu_utilization.py
+   Write-Output("WARNING - Usage of $total Bytes Services in WARNING State")
+   exit 1
+}
+ elseif($total -ge 41 ){
+#   C:\Python\Python37\python.exe C:\Users\cpu_utilization.py
+   Write-Output("CRITICAL - Usage of $total Bytes Services in CRITICAL State")
+   exit 2
+}
+ else{
+   Write-Output("UNKNOWN - Usage of $total Bytes Services in UNKNOWN State")
+   exit 3
+}
+
+
+*********************************************************************************************************************
+
 #!/usr/bin/python3
 
 import os
