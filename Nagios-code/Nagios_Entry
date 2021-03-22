@@ -1,13 +1,43 @@
 node
 ****
-/usr/lib64/nagios/plugins ---> you can store plugin here
+step1: /usr/lib64/nagios/plugins ---> you can store your plugin 
+****************************************************************
+root@pocrundeckubuntu:/usr/lib/nagios/plugins#     cat cpu_utilization.sh 
+
+#!/bin/bash
+
+countWarnings=$(top -b -n2 -p 1 | fgrep "Cpu(s)" | tail -1 | awk  '{ print $2 }')
+
+if (( ${countWarnings%%.*}<=30 )); then
+                echo "OK - CPU Usage of ${countWarnings%%.*} % Service in Okay State"
+                exit 0
+        elif (( 31<=${countWarnings%%.*} && ${countWarnings%%.*}<=40 )); then
+                echo "WARNING - CPU Usage of ${countWarnings%%.*} % Service in Warning State"
+                exit 1
+        elif (( 41<=${countWarnings%%.*} && ${countWarnings%%.*}<=100 )); then
+                echo "CRITICAL - CPU Usage of ${countWarnings%%.*} % Service in Critical State"
+                curl -D - \
+                -X "POST" -H "Accept: application/json" \
+                -H "Content-Type: application/json" \
+                -H "X-Rundeck-Auth-Token: NSUt9PpUTTJ6INH7xcjt09VyMcr8cexX" \
+                http://192.168.5.116:4440/api/16/job/576f20ae-5431-43b2-97da-1fd188ba00d5/executions
+                exit 2
+        else
+                echo "UNKNOWN - ${countWarnings%%.*}"
+                exit 3
+fi
 
 
+step2: /etc/nagios ---> ( nrpe.cfg ) you can place the entry like below
+************************************************************************
+
+command[cpu_utilization_bash]=/usr/lib/nagios/plugins/cpu_utilization.sh
 
 Server
 ******
 
-/usr/local/nagios/etc/objects ---> ( vi commands.cfg )  you can place the entry like below
+step3: /usr/local/nagios/etc/objects ---> ( vi commands.cfg )  you can place the entry like below
+**************************************************************************************************
 
 define command{
         command_name    cpu_utilization_bash
@@ -15,7 +45,8 @@ define command{
         }
 
 
-/usr/local/nagios/etc/servers ---> ( vi centoshost.cfg )you have to create this file and make a entry like below
+step4: /usr/local/nagios/etc/servers ---> ( vi centoshost.cfg )you have to create this file and make a entry like below
+************************************************************************************************************************
 
 define host {
         use                             linux-server
