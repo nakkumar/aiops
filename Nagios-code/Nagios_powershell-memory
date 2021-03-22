@@ -1,0 +1,16 @@
+$totmem =  systeminfo  | Select-String -Pattern "Total Physical Memory"
+$totmem1 = $totmem -replace '\s',''
+$totmem2 = $totmem1 | ForEach-Object {$_ -Replace "[^0-9]", ""}
+#Write-Output("$totmem2")
+
+$avamem =  systeminfo  | Select-String -Pattern "Available Physical Memory"
+$avamem1 = $avamem -replace '\s',''
+$avamem2 = $avamem1 | ForEach-Object {$_ -Replace "[^0-9]", ""}
+#Write-Output("$avamem2")
+
+
+$usemem = $totmem2-$avamem2
+#Write-Output("$usemem")
+
+$per = ($usemem/$totmem2)*100
+Write-Output("$per")
