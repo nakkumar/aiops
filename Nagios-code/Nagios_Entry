@@ -1,0 +1,41 @@
+node
+****
+/usr/lib64/nagios/plugins ---> you can store plugin here
+
+
+
+Server
+******
+
+/usr/local/nagios/etc/objects ---> ( vi commands.cfg )  you can place the entry like below
+
+define command{
+        command_name    cpu_utilization_bash
+        command_line    $USER1$/check_nrpe -H $HOSTADDRESS$ -c cpu_utilization_bash
+        }
+
+
+/usr/local/nagios/etc/servers ---> ( vi centoshost.cfg )you have to create this file and make a entry like below
+
+define host {
+        use                             linux-server
+        host_name                       centosnode
+        alias                           centos
+        address                         192.168.4.115
+        max_check_attempts              5
+        check_period                    24x7
+        notification_interval           30
+        notification_period             24x7
+        contacts                        nagiosadmin
+}
+
+define service {
+        use                             generic-service
+        host_name                       centosnode
+        service_description             CPU Utilization CentOS1
+        check_command                   cpu_utilization_bash
+        check_interval                  1
+        notifications_enabled           1
+}
+
+
