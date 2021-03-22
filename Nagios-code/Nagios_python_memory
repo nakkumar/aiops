@@ -1,0 +1,34 @@
+#!/usr/bin/python3
+
+import os
+import psutil
+import wmi, sys, requests
+
+def functionA(memory):
+    if memory<=70:
+        print ( "OK - Memory Usage",memory,"%")
+        sys.exit(0)
+    elif 71<=memory & memory<=80:
+        print ( "WARNING - Memory Usage",memory,"%")
+        sys.exit(1)
+    elif 81<=memory & memory<=100:
+        print ( "CRICTICAL - Using Memory Usage",memory,"%"  )
+        headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'X-Rundeck-Auth-Token': 'NSUt9PpUTTJ6INH7xcjt09VyMcr8cexX',
+        }
+        data = '{"argString":"-servername windows-ser-com -filesystem redhat "}'
+        response = requests.post('http://192.168.5.116:4440/api/16/job/7b90f601-61e8-4719-ad53-5f449a7175b9/executions', headers=headers, data=data)
+        sys.exit(2)
+    else:
+        print ( "UKNOWN  - Memory Usage",memory,"%")
+        sys.exit(3)
+
+    print ("Good bye!")
+
+if __name__ == '__main__':
+    
+    memory = psutil.virtual_memory().percent
+    memory = int(memory)
+    functionA(memory)
