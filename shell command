@@ -127,3 +127,7 @@ set ssl-verify=ignore
 windows_cpu_command
 ********************
 (Get-Counter '\Processor(_Total)\% Processor Time').CounterSamples.CookedValue
+
+windows memory increase cmd
+****************************
+$mem_stress = "a" * 500MB
