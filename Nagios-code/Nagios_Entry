@@ -69,4 +69,8 @@ define service {
         notifications_enabled           1
 }
 
+######################################################################
+Nagios windows path
 
+C:\Users --> pyhton script
+C:\Program Files\NSClient++\scripts  --> powershell script
