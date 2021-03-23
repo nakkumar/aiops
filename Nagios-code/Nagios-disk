@@ -1,0 +1,15 @@
+Powershell script to calculate the "C" -DRIVE usage
+****************************************************
+
+$disk = Get-WmiObject Win32_LogicalDisk -Filter "DeviceID='C:'" | Select-Object Size, FreeSpace
+
+$totdis = ("{0}" -f [math]::truncate($disk.Size / 1GB))
+$avadis = ("{0}" -f [math]::truncate($disk.FreeSpace / 1GB))
+
+#Write-Output("$totdis")
+#Write-Output("$avadis")
+
+#$usedisk = ($totdis-$avadis)
+
+$total = [int]((($totdis-$avadis)/$totdis)*100)
+Write-Output("$total")
