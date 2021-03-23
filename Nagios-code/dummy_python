@@ -1,0 +1,33 @@
+#!/usr/bin/env python3.8
+import wmi, sys, os, requests
+
+def functionA(var):
+    if var<=69:
+        print ( "OK - C:\\ Drive Used Space",var,"%")
+        sys.exit(0)
+    elif 70<=var & var<=80:
+        print ( "Warning - C:\\ Drive Used Space",var,"%"  )
+        sys.exit(1)
+    elif 81<=var & var<=100:
+        print ( "CRITICAL  - C:\\ Drive Used Space",var,"%")
+        headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'X-Rundeck-Auth-Token': 'NSUt9PpUTTJ6INH7xcjt09VyMcr8cexX',
+        }
+        data = '{"argString":"-servername windows-ser-com -filesystem C:/rundeck/ "}'
+        response = requests.post('http://192.168.5.116:4440/api/16/job/284a77ba-12a9-4c1a-a6d8-0b6db4703327/executions', headers=headers, data=data)		
+        sys.exit(2)
+    else:
+        print ( "UKNOWN  - C:\\ Drive Used Space",var,"%")
+        sys.exit(3)
+
+    print ("Good bye!")
+
+if __name__ == '__main__':
+    c = wmi.WMI ()
+    var=(int(format(c.Win32_LogicalDisk()[0].Freespace))/int(format(c.Win32_LogicalDisk()[0].Size)))*100
+    var=int(var)
+    Total = 100
+    var = Total - var
+    functionA(var)
