@@ -12,4 +12,71 @@ $avadis = ("{0}" -f [math]::truncate($disk.FreeSpace / 1GB))
 #$usedisk = ($totdis-$avadis)
 
 $total = [int]((($totdis-$avadis)/$totdis)*100)
+#Write-Output("$total")
+
+if($total -ge 0 -and $total -le 75){
+   Write-Output("OK - Usage of $total Bytes Services in OK State")
+   exit 0
+} elseif($total -ge 76 -and $total -le 80){
+  C:\Python\Python37\python.exe C:\Users\redhat.py
+   Write-Output("WARNING - Usage of $total Bytes Services in WARNING State")
+   exit 1
+}
+ elseif($total -ge 81 ){
+   C:\Python\Python37\python.exe C:\Users\redhat.py
+   Write-Output("CRITICAL - Usage of $total Bytes Services in CRITICAL State")
+   exit 2
+}
+ else{
+   Write-Output("UNKNOWN - Usage of $total Bytes Services in UNKNOWN State")
+   exit 3
+}
+
+
+############################################
+
+
+
+
+$disk = Get-WmiObject Win32_LogicalDisk -Filter "DeviceID='C:'" | Select-Object Size, FreeSpace
+
+$totdis = ("{0}" -f [math]::truncate($disk.Size / 1GB))
+$avadis = ("{0}" -f [math]::truncate($disk.FreeSpace / 1GB))
+
+#Write-Output("$totdis")
+#Write-Output("$avadis")
+
+#$usedisk = ($totdis-$avadis)
+
+$total = [int]((($totdis-$avadis)/$totdis)*100)
 Write-Output("$total")
+#########################################################################
+
+python-rundeck-trigger
+************************
+
+#!/usr/bin/python3
+
+import os
+import psutil
+import wmi, sys, requests
+
+def functionA(var):
+    
+
+		
+        headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'X-Rundeck-Auth-Token': 'WApjt25lt0SN8ONS0nRJXc7mqrZ8lQzC',
+        }
+        data = '{"argString":"-servername windows-ser-com -filesystem C:/rundeck/ "}'
+        response = requests.post('http://192.168.5.116:4440/api/16/job/2456ef72-25c9-4894-bbf6-46f7e702c7de/executions', headers=headers, data=data)		
+  
+
+
+if __name__ == '__main__':
+    
+    var = psutil.virtual_memory().percent
+    var = int(var)
+    functionA(var)
