@@ -1,5 +1,5 @@
 node
-****
+############################################################################################################3
 step1: /usr/lib64/nagios/plugins ---> you can store your plugin 
 ****************************************************************
 root@pocrundeckubuntu:/usr/lib/nagios/plugins#     cat cpu_utilization.sh 
@@ -34,7 +34,7 @@ step2: /etc/nagios ---> ( nrpe.cfg ) you can place the entry like below
 command[cpu_utilization_bash]=/usr/lib/nagios/plugins/cpu_utilization.sh
 
 Server
-******
+#####################################################################################################################################
 
 step3: /usr/local/nagios/etc/objects ---> ( vi commands.cfg )  you can place the entry like below
 **************************************************************************************************
