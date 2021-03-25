@@ -128,4 +128,25 @@ if($Seconds -lt 5){
    exit 3
 }
 
+
+###
+
+
+#$URL ='http://192.168.4.22/demo.php'
+$URL ='http://192.168.2.25/demo.html'
+#$TimeTaken = Measure-Command -Expression {
+#$Site = Invoke-WebRequest -Uri $URL
+#}
+$Seconds = [Math]::Round($TimeTaken.TotalSeconds)
+#$Seconds = 1
+if($Seconds -lt 5){
+   Write-Output("OK - Usage of $Seconds% Services in OK State")
+   exit 0
+} elseif($Seconds -ge 5){
+   C:\Python\Python37\python.exe C:\Users\webresponse.py
+   Write-Output("CRITICAL - Usage of $Seconds% Services in CRITICAL State")
+   exit 3
+}
+
+
 #############################
