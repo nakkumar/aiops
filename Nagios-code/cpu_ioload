@@ -1,0 +1,30 @@
+#!/bin/bash
+
+countWarnings=$(iotop -botqqq --iter=3 | awk '{ print $7 }' > /tmp/cpu-ioload)
+countWarnings=$(tail /tmp/cpu-ioload)
+
+if test -z "$countWarnings"
+then
+      countWarnings=0
+else
+      countWarnings=$countWarnings
+fi
+
+if (( ${countWarnings%%.*}<=25 )); then
+                echo "OK - I/O Usage of ${countWarnings%%.*} % Service in Okay State"
+                exit 0
+        elif (( 26<=${countWarnings%%.*} && ${countWarnings%%.*}<=80 )); then
+                echo "WARNING - I/O Usage of ${countWarnings%%.*} % Service in Warning State"
+                exit 1
+        elif (( 81<=${countWarnings%%.*} )); then
+                echo "CRITICAL - I/O Usage of ${countWarnings%%.*} % Service in Critical State"
+                curl -D - \
+                -X "POST" -H "Accept: application/json" \
+                -H "Content-Type: application/json" \
+                -H "X-Rundeck-Auth-Token: NSUt9PpUTTJ6INH7xcjt09VyMcr8cexX" \
+                http://192.168.5.116:4440/api/16/job/0bd07a19-bea8-43f4-bf8d-9d748a04917d/executions
+                exit 2
+        else
+                echo "UNKNOWN - ${countWarnings%%.*}"
+                exit 3
+fi
