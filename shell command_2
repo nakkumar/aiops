@@ -1,0 +1,7 @@
+Windows io performance
+***********************
+
+test = % { (Get-WmiObject Win32_PerfFormattedData_PerfProc_Process | Where-Object { $_.Name -eq "_Total"}).IOWriteOperationsPersec }
+
+
+test2 = % { (Get-WmiObject Win32_PerfRawData_PerfDisk_PhysicalDisk | Where-Object { $_.Name -like "0*"}).DiskWriteBytesPersec /1024 }
