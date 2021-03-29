@@ -1,0 +1,30 @@
+Windows
+*******
+
+$test = java -XX:+PrintFlagsFinal -version | findstr /i "HeapSize PermSize ThreadStackSize"  |  Select-Object -Index 2 | out-file -filepath C:\jvm_data.txt
+
+$test2 = Get-Content "C:\jvm_data.txt" | Select-Object -Index 0
+
+$test3 = $test2 -replace '\s',''
+
+$total = $test3 | ForEach-Object {$_ -Replace "[^0-9]", ""}
+
+Write-Output "the value is $test4"
+
+if($total -ge 0 -and $total -le 30){
+   Write-Output("OK - Usage of $total Bytes Services in OK State")
+   exit 0
+} elseif($total -ge 31 -and $total -le 40){
+#  C:\Python\Python37\python.exe C:\Users\cpu_utilization.py
+   Write-Output("WARNING - Usage of $total Bytes Services in WARNING State")
+   exit 1
+}
+ elseif($total -ge 100000000000000000000000 ){
+#   C:\Python\Python37\python.exe C:\Users\cpu_utilization.py
+   Write-Output("CRITICAL - Usage of $total Bytes Services in CRITICAL State")
+   exit 2
+}
+ else{
+   Write-Output("UNKNOWN - Usage of $total Bytes Services in UNKNOWN State")
+   exit 3
+}
