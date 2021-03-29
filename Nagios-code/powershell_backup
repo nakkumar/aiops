@@ -1,0 +1,13 @@
+#$test = Get-Counter -Counter "\LogicalDisk(_total)\Avg. Disk sec/Write" 
+#Write-Output "$test"
+
+$Counter = Get-Counter -Counter "\LogicalDisk(*)\Avg. Disk sec/Write"
+$Counter.CounterSamples[4] |  select-object CookedValue | out-file -filepath C:\io_data.txt
+#$test = $counter
+#$test1 = ( $test | ft -HideTableHeaders | Out-String).Trim()
+#$test.CounterSamples[1]
+#Write-Output "$test"
+$test = Get-Content "C:\io_data.txt" | Select-Object -Index 3
+#$test | Select-Object -Index 3
+#$test2 = $test | Select-Object -First 3
+Write-Output "$test"
