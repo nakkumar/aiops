@@ -5,3 +5,9 @@ Get-Counter -Counter "\LogicalDisk(*)\Avg. Disk sec/Write"
 Get-Counter -Counter "\LogicalDisk(*)\Avg. Disk sec/Read"
 
 
+java memory
+***********
+
+jstat -gc 18071
+
+jmap -histo:live 18750 | head | awk '{ print $3 }' | awk -F: 'NR==3 {print $1}'
