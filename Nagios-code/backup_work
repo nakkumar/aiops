@@ -1,0 +1,22 @@
+#!/bin/bash
+
+#var=$(jps | awk 'NR == 1 {print $1}' > /home/centos/test)
+#countWarnings=$(awk -F: 'NR==1 {print $1}' /home/centos/test)
+
+test=$(jps | grep ForExample | awk '{ print $1 }')
+countWarnings=$(jmap -histo:live $test | head | awk '{ print $3 }' | awk -F: 'NR==3 {print $1}')
+
+if (( ${countWarnings%%.*}<1000000 )); then
+                echo "OK - JVM Memory Usage of ${countWarnings%%.*} --> $test Service in Okay State"
+                exit 0
+        elif (( ${countWarnings%%.*}>=1000000 )); then
+                echo "CRITICAL - JVM Memory Usage of ${countWarnings%%.*} % Service in Critical State"
+                curl -D - \
+                -X "POST" -H "Accept: application/json" \
+                -H "Content-Type: application/json" \
+                -H "X-Rundeck-Auth-Token: NSUt9PpUTTJ6INH7xcjt09VyMcr8cexX" \
+#                http://192.168.5.116:4440/api/16/job/18e323fe-8664-4823-b108-b5af981988c7/executions
+                exit 2
+else
+         echo "OK - The JVM Memory Usage ${countWarnings%%.*} --> $test Service in Okay State"
+fi
