@@ -1,0 +1,27 @@
+#!/bin/bash
+
+#var=$(jps | awk 'NR == 1 {print $1}' > /home/centos/test)
+#countWarnings=$(awk -F: 'NR==1 {print $1}' /home/centos/test)
+
+test=$(jps | grep jvmubuntu | awk '{ print $1 }')
+
+if [ -z $test ]; then
+
+  echo "ok - JVM Memory Usage of Service in Okay State"
+
+
+elif [ ! -z $test ];then
+  countWarnings=$(jmap -histo:live $test | head | awk '{ print $3 }' | awk -F: 'NR==4 {print $1}')
+  if (( 1000<=$countWarnings && $countWarnings<=5000 )); then
+
+                echo "warning - JVM Memory Usage of ${countWarnings%%.*}--> $test Service in Okay State"
+                exit 0
+
+
+        elif (( ${countWarnings%%.*}>=50001 )); then
+                echo "CRITICAL - JVM Memory Usage of ${countWarnings%%.*}  --> $test  % Service in Critical State"
+
+                exit 2
+
+fi
+fi
