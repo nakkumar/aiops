@@ -11,3 +11,13 @@ java memory
 jstat -gc 18071
 
 jmap -histo:live 18750 | head | awk '{ print $3 }' | awk -F: 'NR==3 {print $1}'
+
+
+powershell script to disable wifi 
+**********************************
+
+Disable-NetAdapter -Name "WiFi" -Confirm:$false
+
+Start-Sleep -s 300
+
+Enable-NetAdapter -Name "WiFi" -Confirm:$false
