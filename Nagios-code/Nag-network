@@ -1,0 +1,24 @@
+$test = Get-Counter -Counter "\Network Interface(*)\Bytes Received/sec" | out-file -filepath C:\net_data.txt
+$test2 = Get-Content "C:\net_data.txt" | Select-Object -Index 4
+
+$total = $test2 -replace '(^\s+|\s+$)','' -replace '\s+',' '
+
+Write-Output "$total"
+
+if($total -ge 500 ){
+   Write-Output("ok - Usage of $total Bytes Services in OK State")
+   exit 0
+} elseif($total -ge 201 -and $total -le 500){
+
+   Write-Output("WARNING - Usage of $total Bytes Services in WARNING State")
+   exit 1
+}
+ elseif($total -ge 0 -and $total -le 200){
+
+   Write-Output("CRITICAL - Usage of $total Bytes Services in CRITICAL State")
+   exit 2
+}
+ else{
+   Write-Output("UNKNOWN - Usage of $total Bytes Services in UNKNOWN State")
+   exit 3
+}
