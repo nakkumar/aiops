@@ -21,3 +21,9 @@ Disable-NetAdapter -Name "WiFi" -Confirm:$false
 Start-Sleep -s 300
 
 Enable-NetAdapter -Name "WiFi" -Confirm:$false
+
+**************************************************************************************
+
+
+
+Get-Process | Sort CPU -Descending | Select -First 10 -Property ProcessName,cpu | Sort-Object -Property cpu
