@@ -189,3 +189,19 @@ if($total -ge 0 -and $total -le 60){
    Write-Output("UNKNOWN - Usage of top5 cpu: '$test3 --> $name'  process in UNKNOWN State")
    exit 3
 }
+
+Windows inline script
+**********************
+
+$test = Get-Process | Sort-object CPU -Descending | Select -First 6 -Property ProcessName | out-file -filepath C:\top5cpu_data2.txt
+$test2 = Get-Content "C:\top5cpu_data.txt" | Select-Object -last 7
+#$test3 = $test2 -replace '\s',''
+ Get-Process | Sort-object CPU -Descending | Select -First 6 -Property ProcessName,cpu,id
+#$name = $test3 | Select-Object -first 1
+Write-Output("******************** $test2")
+
+$pid1 = Get-Process | Sort-object CPU -Descending | Select -First 2 -Property id | Select -last 1 | out-file -filepath C:\top5cpu_id1.txt
+$pid2 = Get-Content "C:\top5cpu_id1.txt" | Select-Object -last 3
+Write-Output("******************** $id2")
+
+taskkill /PID $pid 
