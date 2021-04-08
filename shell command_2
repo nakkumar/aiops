@@ -24,6 +24,13 @@ Enable-NetAdapter -Name "WiFi" -Confirm:$false
 
 **************************************************************************************
 
-
-
 Get-Process | Sort CPU -Descending | Select -First 10 -Property ProcessName,cpu | Sort-Object -Property cpu
+
+PID-->PROCESS NAME
+******************
+ ps -p 16049 -o comm=
+ 
+ Top cpu using process
+ *********************
+ 
+ ps -eo pid,ppid,comm,cmd,%mem,%cpu --sort=-%cpu | head
