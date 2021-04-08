@@ -73,3 +73,42 @@ fi
     sleep 0.5
 
 done
+
+###################################################################################################################################################
+
+Windows
+********
+$value=get-service | select-object Name | out-file -filepath C:\topcpu.txt
+
+$count=(get-service | select-object Name).Length
+
+$count1=$count+1
+
+$val=2
+
+while($val -le 10)
+     {
+      $val++
+      Write-Output  "$val"
+	  
+	  $value2=Get-Content "C:\topcpu.txt" | Select-Object -Index $val  
+	  
+	  $space=$value2 -replace '\s',''
+	  
+	  #Write-Output "$value2"
+	  
+	  $value3=tasklist /svc /fi "SERVICES eq $space" | select-string '7688'
+	  
+	  if($value3)
+	  {
+		  Write-Output "service#############$space#######restared"
+		  Restart-Service  $space
+		  		  
+	  }
+	  else
+	  {
+		  Write-Output "no valuse"
+	  }
+	  
+	  #Write-Output "$value3"
+     }
