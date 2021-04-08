@@ -34,3 +34,5 @@ PID-->PROCESS NAME
  *********************
  
  ps -eo pid,ppid,comm,cmd,%mem,%cpu --sort=-%cpu | head
+
+top -b -n 1 -p 16049 | tail -1 | awk '{ print $NF}'
