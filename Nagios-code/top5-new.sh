@@ -86,7 +86,7 @@ $count1=$count+1
 
 $val=2
 
-while($val -le 10)
+while($val -le $count1)
      {
       $val++
       Write-Output  "$val"
