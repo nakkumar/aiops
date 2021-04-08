@@ -1,5 +1,6 @@
 #!/bin/bash
-systemctl list-units --type=service | awk '{ print $1 }' | grep '.service'  > /home/centos/top5/data.txt
+
+#systemctl list-units --type=service | awk '{ print $1 }' | grep '.service'  > /home/centos/top5/data.txt
 
 count=$(systemctl list-units --type=service | awk '{ print $1 }' | grep '.service' | wc -l)
 
@@ -16,6 +17,13 @@ val=$(systemctl list-units --type=service | awk '{ print $1 }' | grep '.service'
 
     max=$(($max+1))
 
-    sleep 2
+test=$(systemctl status $val | grep '31463')
+
+
+
+echo "$test"
+
+
+#    sleep 2
 
 done
