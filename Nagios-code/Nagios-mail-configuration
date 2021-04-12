@@ -1,0 +1,93 @@
+Nagios E-Mail configuraion
+***************************
+
+step1: dnf install postfix cyrus-sasl-plain mailx
+
+step2: sed -i 's/smtp_tls_security_level = may/smtp_tls_security_level = encrypt/' /etc/postfix/main.cf
+
+step3: echo "smtp_tls_security_level = encrypt" >> /etc/postfix/main.cf
+
+step4: echo "smtp_tls_CAfile = /etc/pki/tls/certs/ca-bundle.crt" >> /etc/postfix/main.cf 
+
+step5: cat >> /etc/postfix/main.cf ---> past the below lines 
+
+relayhost = [smtp.gmail.com]:587
+smtp_sasl_auth_enable = yes
+smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
+smtp_sasl_security_options = noanonymous
+
+like:
+*****
+smtp_tls_security_level = encrypt
+meta_directory = /etc/postfix
+shlib_directory = /usr/lib64/postfix
+smtp_tls_security_level = encrypt
+smtp_tls_CAfile = /etc/pki/tls/certs/ca-bundle.crt
+relayhost = [smtp.gmail.com]:587
+smtp_sasl_auth_enable = yes
+smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
+smtp_sasl_security_options = noanonymous
+
+
+
+step6: vi /etc/postfix/sasl_passwd
+[smtp.gmail.com]:587 (sending mail-id):(sending mail-id passwd)
+like ---> [smtp.gmail.com]:587 userid@gmail.com:password
+
+step7: postmap /etc/postfix/sasl_passwd
+
+step8: chown root:root /etc/postfix/sasl_passwd*
+
+step9: chmod 600 /etc/postfix/sasl_passwd*
+
+step10: systemctl enable postfix --now
+
+
+Testing
+*******
+
+echo "Test Postfix Gmail Relay" | mail -s "Postfix Gmail Relay" (enter receiving-mail-id)
+
+like: echo "Test Postfix Gmail Relay" | mail -s "Postfix Gmail Relay" userid@gmail.com
+
+
+Nagios server configuration
+****************************
+
+step11: vi /usr/local/nagios/etc/objects/contacts.cfg  --> add the below lines
+(or)
+vi /usr/local/nagios/etc/objects/kifarunix-demo/contacts.cfg    --> add the below lines
+
+define contact{
+        name                            kifarunix-demo-contact
+        service_notification_period     24x7
+        host_notification_period        24x7
+        service_notification_options    w,u,c,r
+        host_notification_options       d,r
+        service_notification_commands   notify-service-by-email
+        host_notification_commands      notify-host-by-email
+        register                        0
+        }
+
+like
+****
+define contact {
+
+    contact_name                            nagiosadmin             ; Short name of user
+    use                                     generic-contact         ; Inherit default values from generic-contact template (defined above)
+    alias                                   Nagios Admin            ; Full name of user
+    email                                   nakkumar1997@gmail.com ; <<***** CHANGE THIS TO YOUR EMAIL ADDRESS ******
+    service_notification_period             24x7
+    service_notification_options            w,u,c,r,f,s
+    service_notification_commands           notify-service-by-email
+    host_notification_period                24x7
+    host_notification_options               d,u,r,f,s
+    host_notification_commands              notify-host-by-email
+
+}
+
+step12: /usr/local/nagios/bin/nagios -v /usr/local/nagios/etc/nagios.cfg
+
+step13: systemctl restart nagios
+
+
