@@ -74,3 +74,20 @@ Nagios windows path
 
 C:\Users --> pyhton script
 C:\Program Files\NSClient++\scripts  --> powershell script
+
+
+Nagios client installtion on nodes
+***********************************
+step1: cd /tmp
+
+step2: wget http://assets.nagios.com/downloads/nagiosxi/agents/linux-nrpe-agent.tar.gz
+
+step3: tar xzf linux-nrpe-agent.tar.gz
+
+step4: cd linux-nrpe-agent
+
+step5: ./fullinstall  --> give Nagios server ip-Addr at the end.
+
+final you have to give the nagios server ip address to complete the installation process.
+
+
