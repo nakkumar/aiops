@@ -1,6 +1,6 @@
 node
 ############################################################################################################3
-step1: /usr/lib64/nagios/plugins ---> you can store your plugin 
+step1: /usr/lib64/nagios/plugins (or) /usr/local/nagios/libexec ---> you can store your plugin 
 ****************************************************************
 root@pocrundeckubuntu:/usr/lib/nagios/plugins#     cat cpu_utilization.sh 
 
@@ -28,7 +28,7 @@ if (( ${countWarnings%%.*}<=30 )); then
 fi
 
 
-step2: /etc/nagios ---> ( nrpe.cfg ) you can place the entry like below
+step2: /etc/nagios (or) /usr/local/nagios/etc ---> ( nrpe.cfg ) you can place the entry like below
 ************************************************************************
 
 command[cpu_utilization_bash]=/usr/lib/nagios/plugins/cpu_utilization.sh
