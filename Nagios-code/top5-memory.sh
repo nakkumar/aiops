@@ -128,3 +128,56 @@ if($total -ge 0 -and $total -le 60){
 
 Rundeck-script
 ***************
+
+###list top 5 memory process
+$topmem = Get-Process -IncludeUserName | Sort-Object CPU -desc | Select -first 6 | Select ProcessName | out-file -filepath C:\top5mem_data.txt
+$top5mem = Get-Content "C:\top5mem_data.txt" | Select-Object -last 7
+$top5mem2 = $top5mem -replace '\s',''
+Write-Output("$top5mem2")
+Get-Process -IncludeUserName | Sort-Object CPU -desc | Select -first 5
+
+###list top 1 process PID
+$pid1 = Get-Process -IncludeUserName | Sort-Object CPU -desc | Select -first 2  -Property id | Select -last 1 | out-file -filepath C:\top5mem_id1.txt
+$pid2 = Get-Content "C:\top5mem_id1.txt" | Select-Object -last 3 | where{$_ -ne ""}
+Write-Output("id1 ---> $pid2")
+
+#$test3 = $pid2 -replace '\s',''
+
+#taskkill /PID $pid2 /F
+
+################ service restart #######################
+
+$value=get-service | select-object Name | out-file -filepath C:\topcpu.txt
+
+$count=(get-service | select-object Name).Length
+
+$count1=$count+1
+
+$val=2
+
+while($val -le $count1)
+     {
+      $val++
+      Write-Output  "$val"
+
+          $value2=Get-Content "C:\topcpu.txt" | Select-Object -Index $val
+
+          $space=$value2 -replace '\s',''
+
+          #Write-Output "$value2"
+
+          $value3=tasklist /svc /fi "SERVICES eq $space" | select-string $pid2
+
+          if($value3)
+          {
+                  Write-Output "service#############$space#######restared"
+                  Restart-Service  $space
+
+          }
+          else
+          {
+                  Write-Output "no valuse"
+          }
+
+          #Write-Output "$value3"
+     }
