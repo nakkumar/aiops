@@ -90,4 +90,4 @@ step5: ./fullinstall  --> give Nagios server ip-Addr at the end.
 
 final you have to give the nagios server ip address to complete the installation process.
 
-
+$ systemctl restart xinetd
