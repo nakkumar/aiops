@@ -1,6 +1,8 @@
 Windows io performance
 ***********************
 
+gwmi Win32_PerfFormattedData_PerfProc_Process | sort IOReadBytesPersec -des | select  Name,IOReadBytesPersec,IOWriteBytesPersec | ft -AutoSize
+
 Get-Counter -Counter "\LogicalDisk(*)\Avg. Disk sec/Write"
 Get-Counter -Counter "\LogicalDisk(*)\Avg. Disk sec/Read"
 
