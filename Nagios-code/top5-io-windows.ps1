@@ -1,3 +1,6 @@
+Node script
+************
+
 ### print the top 5 io process ###
 
 gwmi Win32_PerfFormattedData_PerfProc_Process | sort IOReadBytesPersec -des | select  Name -First 6 | out-file -filepath C:\top5io_name.txt
@@ -32,4 +35,110 @@ if($total -le 60){
  else{
    Write-Output("UNKNOWN - Usage of $total top5 io process --> $name2")
    exit 3
+}
+
+
+Rundeck inline script
+**********************
+
+gwmi Win32_PerfFormattedData_PerfProc_Process | sort IOReadBytesPersec -des | select  IDProcess -First 6  | out-file -filepath C:\first_io_pid.txt
+
+$pid1 = get-content C:\first_io_pid.txt | Select-Object -Index 3
+
+
+$num
+
+if ($pid1 -ge $num)
+{
+	
+Write-Output  "first ---> $pid1"
+
+################ service restart value1 #######################
+
+$value=get-service | select-object Name | out-file -filepath C:\topcpu.txt
+
+$count=(get-service | select-object Name).Length
+
+$count1=$count+1
+
+$val=2
+
+while($val -le $count1)
+     {
+      $val++
+      Write-Output  "$val"
+
+          $value2=Get-Content "C:\topcpu.txt" | Select-Object -Index $val
+
+          $space=$value2 -replace '\s',''
+
+          #Write-Output "$value2"
+
+          $value3=tasklist /svc /fi "SERVICES eq $space" | select-string $pid1
+
+          if($value3)
+          {
+                  Write-Output "service#############$space#######restared"
+                  Restart-Service  $space
+
+          }
+          else
+          {
+                  Write-Output "ONE NO VALUE"
+          }
+
+          #Write-Output "$value3"
+     }
+
+
+
+
+}
+
+else
+
+{
+	
+$pid2 = get-content C:\first_io_pid.txt | Select-Object -Index 4
+Write-Output  "second --> $pid2"
+
+################ service restart value2 #######################
+
+$value=get-service | select-object Name | out-file -filepath C:\topcpu.txt
+
+$count=(get-service | select-object Name).Length
+
+$count1=$count+1
+
+$val=2
+
+while($val -le $count1)
+     {
+      $val++
+      Write-Output  "$val"
+
+          $value2=Get-Content "C:\topcpu.txt" | Select-Object -Index $val
+
+          $space=$value2 -replace '\s',''
+
+          #Write-Output "$value2"
+
+          $value3=tasklist /svc /fi "SERVICES eq $space" | select-string $pid2
+
+          if($value3)
+          {
+                  Write-Output "service#############$space#######restared"
+                  Restart-Service  $space
+
+          }
+          else
+          {
+                  Write-Output "TWO NO VALUE"
+          }
+
+          #Write-Output "$value3"
+     }	
+	
+
+
 }
