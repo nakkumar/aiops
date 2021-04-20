@@ -1,3 +1,64 @@
+ubuntu
+******
+
+#!/bin/bash
+
+# mkdir /home/$(whoami)/log
+ touch /home/$(whoami)/log/data_after
+ touch /home/$(whoami)/log/data_before
+
+ tail -1 /var/log/apache2/error.log > /home/$(whoami)/log/data_after
+ msg=$(tail -1 /home/$(whoami)/log/data_after)
+ if cmp -s /home/$(whoami)/log/data_after /home/$(whoami)/log/data_before
+ then
+         {
+             echo "ok --> NO new logs"
+             exit 0
+     }
+else
+        {
+             echo "WARNING --> $msg"
+             cp /home/$(whoami)/log/data_after /home/$(whoami)/log/data_before
+             exit 1
+        }
+
+
+ fi
+
+
+Centos
+*******
+
+#!/bin/bash
+
+# mkdir /home/$(whoami)/log
+ touch /home/$(whoami)/log/data_after
+ touch /home/$(whoami)/log/data_before
+
+ tail -1 /var/log/httpd/error_log > /home/$(whoami)/log/data_after
+ msg=$(tail -1 /home/$(whoami)/log/data_after)
+ if cmp -s /home/$(whoami)/log/data_after /home/$(whoami)/log/data_before
+ then
+         {
+             echo "ok --> NO new logs"
+             exit 0
+     }
+else
+        {
+             echo "WARNING --> $msg"
+             cp /home/$(whoami)/log/data_after /home/$(whoami)/log/data_before
+             exit 1
+        }
+
+
+ fi
+
+
+
+
+#############################################################################################################################################################################
+
+
 centos and ubuntu log file name and path diff
 **********************************************
 
