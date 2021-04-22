@@ -46,7 +46,7 @@ gwmi Win32_PerfFormattedData_PerfProc_Process | sort IOReadBytesPersec -des | se
 $pid1 = get-content C:\first_io_pid.txt | Select-Object -Index 3
 
 
-$num
+$num=0
 
 if ($pid1 -ge $num)
 {
