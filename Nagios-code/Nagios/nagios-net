@@ -1,0 +1,386 @@
+Nagios-NETWORK
+***************
+
+#####################################################################
+							LINUX
+#####################################################################
+
+#!/bin/bash
+
+#var=$(iftop -Bt -L1 -s1 2> /dev/null | grep "Total send and receive rate:" | awk '{print$7}' > /tmp/networkinfo)
+var=$(tail /tmp/networkinfo)
+
+value=${var: -2}
+
+
+if [[ "$value" == "MB" ]]; then
+        total=${var:: -2}
+        if (( ${total%%.*}<80 )); then
+             echo "WARNING - Network Usage of $total MB Service in Warning State"
+             exit 1
+        elif (( 80<=${total%%,*} )); then
+             echo "CRITICAL -Network Usage of $total MB Service in Critical State"
+             curl -D - \
+             -X "POST" -H "Accept: application/json" \
+             -H "Content-Type: application/json" \
+             -H "X-Rundeck-Auth-Token: NSUt9PpUTTJ6INH7xcjt09VyMcr8cexX" \
+             http://192.168.5.116:4440/api/16/job/c8951445-e3a9-43eb-97bf-cd943bf73d22/executions
+             exit 2
+            fi
+else
+        echo "OK - Network Usage $var Service in Okay State"
+        exit 0
+fi
+
+RUNDECK-SCRIPT
+***************
+
+#!/bin/bash
+
+count=$(systemctl list-units --type=service | awk '{ print $1 }' | grep '.service' | wc -l)
+
+pid=$(netstat -tunp | sort -r | awk '{ print $7}' |  awk -F: 'NR=='1' {print $1}' | sed 's/[^0-9]*//g')
+
+name=$(sudo netstat -tunp | sort -r | awk '{ print $7}' |  awk -F: 'NR=='1' {print $1}' | sed 's/[^a-z]*//g' | head -c 3)
+
+echo "$count"
+
+check=0
+
+max=1
+
+while [ $max -le $count ]
+do
+    echo $max
+
+val=$(systemctl list-units --type=service | awk '{ print $1 }' | grep '.service' | awk -F: 'NR=='$max' {print $1}')
+
+    echo "$val"
+
+    max=$(($max+1))
+
+test=$(systemctl status $val | grep $pid | awk '{ print $1 }' | awk -F: 'NR=='1' { print $1 }')
+
+
+if [ ! -z $test ]; then
+
+echo "ok"
+
+systemctl restart $val
+
+echo "service $val restarted"
+
+check=$(($check+1))
+
+else
+
+echo "###########novalue#############"
+
+fi
+
+done
+
+#### MAPPING PROCESS
+
+if [ $check -ge 1 ]; then
+
+{
+echo "SERVICE RESTARTED"
+}
+
+else
+
+{
+echo "NO SERVICE RESTARTED"
+
+max1=1
+
+while [ $max1 -le $count ]
+do
+    echo $max1
+
+val2=$(systemctl list-units --type=service | awk '{ print $1 }' | grep '.service' | awk -F: 'NR=='$max1' {print $1}'| grep $name)
+
+    echo "$val2"
+
+    max1=$(($max1+1))
+
+
+if [ ! -z $val2 ]; then
+
+echo "ok"
+
+systemctl restart $val2
+
+echo "MAPPING DONE --> service $val restarted"
+
+else
+
+echo "###########NO MAPPING#############"
+
+fi
+
+done
+
+}
+
+fi
+
+#############################################################################################
+									WINDOWS
+#############################################################################################
+
+NODE-SCRIPT
+***********
+
+$test = Get-Counter -Counter "\Network Interface(*)\Bytes Received/sec" | out-file -filepath C:\net_data.txt
+$test2 = Get-Content "C:\net_data.txt" | Select-Object -Index 4
+
+$total = $test2 -replace '(^\s+|\s+$)','' -replace '\s+',' '
+
+Write-Output "$total"
+
+if($total -ge 500 ){
+   Write-Output("ok - Usage of $total Bytes Services in OK State")
+   exit 0
+} elseif($total -ge 201 -and $total -le 500){
+
+   Write-Output("WARNING - Usage of $total Bytes Services in WARNING State")
+   exit 1
+}
+ elseif($total -ge 0 -and $total -le 200){
+
+   Write-Output("CRITICAL - Usage of $total Bytes Services in CRITICAL State")
+   exit 2
+}
+ else{
+   Write-Output("UNKNOWN - Usage of $total Bytes Services in UNKNOWN State")
+   exit 3
+}
+
+RUNDECK-SCRIPT
+***************
+
+gwmi Win32_PerfFormattedData_PerfProc_Process | sort IODataBytesPersec  -des | select  IDProcess -First 6  | out-file -filepath C:\first_net_pid.txt
+
+$pid1 = get-content C:\first_net_pid.txt | Select-Object -Index 3
+
+$check=0
+
+$num=0
+
+if ($pid1 -ge $num)
+{
+	
+Write-Output  "first ---> $pid1"
+
+################ service restart value1 #######################
+
+$value=get-service | select-object Name | out-file -filepath C:\net-usage.txt
+
+$count=(get-service | select-object Name).Length
+
+$count1=$count+1
+
+$val=2
+
+while($val -le $count1)
+     {
+      $val++
+      Write-Output  "$val"
+
+          $value2=Get-Content "C:\net-usage.txt" | Select-Object -Index $val
+
+          $space=$value2 -replace '\s',''
+
+          #Write-Output "$value2"
+
+          $value3=tasklist /svc /fi "SERVICES eq $space" | select-string $pid1
+
+          if($value3)
+          {
+                  Write-Output "service#############$space#######restared"
+                  Restart-Service  $space
+                  
+				  $check=$check+1
+          }
+          else
+          {
+                  Write-Output "ONE NO VALUE"
+          }
+
+          #Write-Output "$value3"
+     }
+
+
+
+
+}
+
+else
+
+{
+	
+$pid2 = get-content C:\first_net_pid.txt | Select-Object -Index 4
+Write-Output  "second --> $pid2"
+
+################ service restart value2 #######################
+
+$value=get-service | select-object Name | out-file -filepath C:\net-usage.txt
+
+$count=(get-service | select-object Name).Length
+
+$count1=$count+1
+
+$val=2
+
+while($val -le $count1)
+     {
+      $val++
+      Write-Output  "$val"
+
+          $value2=Get-Content "C:\net-usage.txt" | Select-Object -Index $val
+
+          $space=$value2 -replace '\s',''
+
+          #Write-Output "$value2"
+
+          $value3=tasklist /svc /fi "SERVICES eq $space" | select-string $pid2
+
+          if($value3)
+          {
+                  Write-Output "service#############$space#######restared"
+                  Restart-Service  $space
+                  $check=$check+1
+          }
+          else
+          {
+                  Write-Output "TWO NO VALUE"
+          }
+
+          #Write-Output "$value3"
+     }	
+	
+
+
+}
+
+if ($check -ge 1)
+
+{
+	Write-Output "SERVICE RESTARED"
+}
+
+else
+
+{
+	Write-Output "NO SERVICE RESTARED"
+	gwmi Win32_PerfFormattedData_PerfProc_Process | sort IODataBytesPersec  -des | select  name -First 6  | out-file -filepath C:\first_net_pid.txt
+
+$name1 = get-content C:\first_net_pid.txt | Select-Object -Index 3  | where{$_ -ne ""}
+$name2 = get-content C:\first_net_pid.txt | Select-Object -Index 4  | where{$_ -ne ""}
+
+$pattern = '[^a-zA-Z]'
+
+$name1 -replace $pattern, '' |  where{$_ -ne ""} | out-file -filepath C:\bbb1.txt
+$name2 -replace $pattern, '' |  where{$_ -ne ""} | out-file -filepath C:\bbb2.txt
+
+
+$total ="Total"
+
+$filter1 = get-content C:\bbb1.txt | Select-Object -Index 0  | where{$_ -ne ""}
+$filter2 = get-content C:\bbb2.txt | Select-Object -Index 0  | where{$_ -ne ""}
+
+Write-Output "$filter1"
+
+
+$check=0
+
+
+if ($filter1 -eq $total)
+
+{
+	Write-Output "EQUAL  $filter1-->$total"
+	
+	$value=get-service | select-object Name | out-file -filepath C:\net-usage.txt
+
+$count=(get-service | select-object Name).Length
+
+$count1=$count+1
+
+$val=2
+
+while($val -le $count1)
+     {
+      $val++
+      Write-Output  "$val"
+
+          $value2=Get-Content "C:\net-usage.txt" | Select-Object -Index $val
+
+          $space=$value2 -replace '\s',''
+
+          #Write-Output "$value2"
+
+          $value3=$space | select-string $filter2
+
+          if($value3)
+          {
+                  Write-Output "service#############$space#######restared"
+                  Restart-Service  $space
+                  
+				  $check=$check+1
+          }
+          else
+          {
+                  Write-Output "TWO NO #NAME# VALUES"
+          }
+
+          #Write-Output "$value3"
+     }
+		
+}
+else
+{
+	Write-Output "NOT EQUAL  #$filter1#$total#"
+	
+$value=get-service | select-object Name | out-file -filepath C:\net-usage.txt
+
+$count=(get-service | select-object Name).Length
+
+$count1=$count+1
+
+$val=2
+
+while($val -le $count1)
+     {
+      $val++
+      Write-Output  "$val"
+
+          $value2=Get-Content "C:\net-usage.txt" | Select-Object -Index $val
+
+          $space=$value2 -replace '\s',''
+
+          #Write-Output "$value2"
+
+          $value3=$space| select-string $filter1
+
+          if($value3)
+          {
+                  Write-Output "service#############$space#######restared"
+                  Restart-Service  $space
+                  
+				  $check=$check+1
+          }
+          else
+          {
+                  Write-Output "ONE NO #NAME# VALUE"
+          }
+
+          #Write-Output "$value3"
+     }
+	
+	
+	
+	
+}
+}
