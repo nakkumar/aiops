@@ -1,0 +1,90 @@
+#!/bin/bash
+
+count=$(systemctl list-units --type=service | awk '{ print $1 }' | grep '.service' | wc -l)
+
+pid=$(netstat -tunp | sort -r | awk '{ print $7}' |  awk -F: 'NR=='1' {print $1}' | sed 's/[^0-9]*//g')
+
+name=$(sudo netstat -tunp | sort -r | awk '{ print $7}' |  awk -F: 'NR=='1' {print $1}' | sed 's/[^a-z]*//g' | head -c 3)
+
+echo "$count"
+
+check=0
+
+max=1
+
+while [ $max -le $count ]
+do
+    echo $max
+
+val=$(systemctl list-units --type=service | awk '{ print $1 }' | grep '.service' | awk -F: 'NR=='$max' {print $1}')
+
+    echo "$val"
+
+    max=$(($max+1))
+
+test=$(systemctl status $val | grep $pid | awk '{ print $1 }' | awk -F: 'NR=='1' { print $1 }')
+
+
+if [ ! -z $test ]; then
+
+echo "ok"
+
+systemctl restart $val
+
+echo "service $val restarted"
+
+check=$(($check+1))
+
+else
+
+echo "###########novalue#############"
+
+fi
+
+done
+
+#### MAPPING PROCESS
+
+if [ $check -ge 1 ]; then
+
+{
+echo "SERVICE RESTARTED"
+}
+
+else
+
+{
+echo "NO SERVICE RESTARTED"
+
+max1=1
+
+while [ $max1 -le $count ]
+do
+    echo $max1
+
+val2=$(systemctl list-units --type=service | awk '{ print $1 }' | grep '.service' | awk -F: 'NR=='$max1' {print $1}'| grep $name)
+
+    echo "$val2"
+
+    max1=$(($max1+1))
+
+
+if [ ! -z $val2 ]; then
+
+echo "ok"
+
+systemctl restart $val2
+
+echo "MAPPING DONE --> service $val restarted"
+
+else
+
+echo "###########NO MAPPING#############"
+
+fi
+
+done
+
+}
+
+fi
