@@ -1,0 +1,11 @@
+DISK
+****
+
+fallocate -l 1G /home/centos/disk/big_file 
+
+7z a /home/centos/disk/big_file.zip  /home/centos/disk/big_file
+
+
+fallocate -l 1G /home/ubuntu/disk/big_file 
+
+7z a /home/ubuntu/disk/big_file.zip  /home/ubuntu/disk/big_file
