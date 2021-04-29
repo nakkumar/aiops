@@ -9,3 +9,8 @@ fallocate -l 1G /home/centos/disk/big_file
 fallocate -l 1G /home/ubuntu/disk/big_file 
 
 7z a /home/ubuntu/disk/big_file.zip  /home/ubuntu/disk/big_file
+
+
+fsutil file createnew C:\big-file\big-file 1073741824
+
+7z a -t7z C:\big-file\big-file.zip C:\big-file\big-file
