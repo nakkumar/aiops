@@ -1,4 +1,9 @@
+
+
 pip uninstall urllib3
 pip uninstall  requests
+
 pip install  requests
 pip install urllib3
+
+systemctl restart rundeckd
