@@ -11,6 +11,8 @@ stress --cpu 8 --timeout 100s
 memory
 *******
 
+stress --vm 4 --timeout 100s
+
 disk
 *****
 
