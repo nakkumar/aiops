@@ -7,3 +7,15 @@ pip install  requests
 pip install urllib3
 
 systemctl restart rundeckd
+
+
+node windows machine error
+***************************
+winrm quickconfig -q
+Set-NetConnectionProfile –NetworkCategory private
+Get-NetFirewallPortFilter | ?{$_.LocalPort -eq 5985 } | Get-NetFirewallRule | ?{ $_.Direction -eq "Inbound" -and $_.Profile -eq "Public" -and $_.Action -eq "Allow"} | Set-NetFirewallRule -RemoteAddress "Any"
+Get-NetFirewallPortFilter | ?{$_.LocalPort -eq 5986 } | Get-NetFirewallRule | ?{ $_.Direction -eq "Inbound" -and $_.Profile -eq "Public" -and $_.Action -eq "Allow"} | Set-NetFirewallRule -RemoteAddress "Any"
+winrm set winrm/config/client/auth '@{Basic="true"}'
+winrm set winrm/config/service/auth '@{Basic="true"}'
+winrm set winrm/config/client '@{AllowUnencrypted="true"}'
+winrm set winrm/config/service '@{AllowUnencrypted="true"}'
