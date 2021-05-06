@@ -5,12 +5,10 @@
 
 CPU
 ****
-
 stress --cpu 8 --timeout 100s
 
 memory
 *******
-
 stress --vm 4 --timeout 100s
 
 disk
@@ -26,7 +24,6 @@ network
 
 CPU
 ****
-
 Measure-Command {$result = 1; foreach ($number in 1..2147483647) {$result = $result * $number}}
 or
 foreach ($loopnumber in 1..2147483647) {$result=1;foreach ($number in 1..2147483647) {$result = $result * $number};$result}
@@ -36,6 +33,8 @@ $result = 1; foreach ($number in 1..2147483647) {$result = $result * $number};
 
 memory
 *******
+$mem_stress = "a" * 1500MB
+
 
 disk
 *****
