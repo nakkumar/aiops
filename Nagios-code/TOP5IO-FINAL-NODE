@@ -1,0 +1,41 @@
+### print the top 5 io process ###
+
+gwmi Win32_PerfFormattedData_PerfProc_Process | sort IOReadBytesPersec -des | select  Name -First 6 | out-file -filepath C:\top5io_name.txt
+
+$name = Get-Content "C:\top5io_name.txt" | Select-Object -last 7 | where{$_ -ne ""}
+
+$name2 = $name -replace '\s',''
+
+### calculate the io usage of the system ###
+
+#$Counter = Get-Counter -Counter "\LogicalDisk(*)\Avg. Disk sec/Write"
+
+#$counter | out-file -filepath C:\io_data1.txt
+
+#$counter2 = Get-Content "C:\io_data1.txt" | Select-Object -Index 10 | where{$_ -ne ""}
+
+#$total = $counter2  -replace '\s',''
+
+$total = (Get-Counter '\LogicalDisk(*)\Avg. Disk sec/Write').CounterSamples.CookedValue[2]
+
+#Write-Output("$total")
+
+if($total -le 0.0098){
+   Write-Output("ok - Usage of $total top5 io process --> $name2")
+   exit 0
+} elseif($total -ge 0.0099  -and $total -le  0.0148){
+
+   Write-Output("WARNING - Usage of $total top5 io process --> $name2")
+C:\Python\Python38-32\python.exe C:\Users\top5io.py
+   exit 1
+}
+ elseif($total -ge 0.0149 ){
+
+   Write-Output("CRITICAL - Usage of $total top5 io process --> $name2")
+C:\Python\Python38-32\python.exe C:\Users\top5io.py
+   exit 2
+}
+ else{
+   Write-Output("UNKNOWN - Usage of $total top5 io process --> $name2")
+   exit 3
+}
