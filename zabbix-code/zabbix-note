@@ -1,0 +1,5 @@
+zabbix log-file monitoring 
+**************************
+error --> Cannot open file "/var/log/messages": [13] Permission denied
+
+$ semanage permissive -a zabbix_agent_t
