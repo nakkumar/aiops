@@ -1,3 +1,9 @@
+zabbix-log file generation
+***************************
+
+create 0640 root zabbix
+
+
 zabbix log-file monitoring 
 **************************
 error --> Cannot open file "/var/log/messages": [13] Permission denied
