@@ -1,5 +1,11 @@
 splunk_server
 *************
+[root@splunk bin]# cat check-cpu.sh
+
+#!/bin/bash
+one=$(top -b -n2 -p 1 | fgrep "Cpu(s)" | tail -1 | awk  '{ print $2 }')
+echo "val=$one"
+
 
 index="linux" sourcetype="check-cpu" | where val > 50
 
