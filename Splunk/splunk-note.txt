@@ -1,0 +1,9 @@
+splunk_server
+*************
+
+index="linux" sourcetype="check-cpu" | where val > 50
+
+mstat="em_metrics"
+
+| rest /services/server/status count=0 splunk_server=* | dedup splunk_server | table splunk_server
+
