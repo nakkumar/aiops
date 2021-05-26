@@ -1,0 +1,5 @@
+cpu>60
+*******
+
+| mstats max(cpu.user) as cpu span=30s by host | where cpu>60
+
