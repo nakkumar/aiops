@@ -1,0 +1,3 @@
+one minute
+***********
+*/1 * * * * sh /var/log/zabbix/httpd.sh
