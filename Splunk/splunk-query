@@ -3,3 +3,5 @@ cpu>60
 
 | mstats max(cpu.user) as cpu span=30s by host | where cpu>60
 
+| mstats max(cpu.user) as cpu Where "index"="em_metrics" AND NOT "host"="rundeckubuntunode.zippyops.com" span=50s by host | where cpu > 50
+
