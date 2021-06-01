@@ -5,3 +5,8 @@ search openstacklocal zippyops.com
 nameserver 10.0.2.2
 nameserver 192.168.1.5
 nameserver 192.168.0.1
+
+
+windows
+********
+network adapter click pana athu properties la pathengana ipv4 irukem athu properties la check panegana , defaul and manual dns irukem , athula manual ah click pane nama dns ah addd panidunga
