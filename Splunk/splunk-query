@@ -5,3 +5,27 @@ cpu>60
 
 | mstats max(cpu.user) as cpu Where "index"="em_metrics" AND NOT "host"="rundeckubuntunode.zippyops.com" span=50s by host | where cpu > 50
 
+
+cpu
+***
+
+| mstats max(cpu.user) as cpu Where "index"="em_metrics" AND NOT "host"="rundeckubuntunode.zippyops.com" span=50s by host | where cpu > 50
+
+
+| mstats max(cpu.user) as cpu Where "index"="em_metrics" AND NOT "host"="rundeckcentosnode.zippyops.com" span=50s by host | where cpu > 50
+
+
+| mstats max(Processor.%_Processor_Time) as cpu Where "index"="em_metrics" AND NOT "host"="rdp1"  span=50s by host | where cpu > 50
+
+
+memory
+*******
+
+| mstats max(memory.used) as memory Where "index"="em_metrics" AND NOT "host"="rundeckubuntunode.zippyops.com" span=50s by host | where memory > 50
+
+
+| mstats max(memory.used) as memory Where "index"="em_metrics" AND NOT "host"="rundeckcentosnode.zippyops.com" span=50s by host | where memory > 50
+
+
+| mstats max(Memory.%_Committed_Bytes_In_Use) as memory Where "index"="em_metrics" AND NOT "host"="rdp1"  span=50s by host | where memory > 50
+
