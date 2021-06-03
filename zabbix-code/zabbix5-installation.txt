@@ -1,0 +1,162 @@
+Zabbix 5 installation on ubuntu 18.04
+**************************************
+
+link: https://computingforgeeks.com/how-to-install-zabbix-server-on-ubuntu-linux/
+
+Step 1: Install Apache httpd server
+************************************
+
+sudo apt update
+sudo apt -y upgrade
+sudo apt install -y apache2
+
+sudo sed -i "s/^ServerTokens OS$/ServerTokens Prod/" /etc/apache2/conf-enabled/security.conf
+sudo sed -i "s/^ServerSignature On$/ServerSignature Off/" /etc/apache2/conf-enabled/security.conf
+
+sudo vim /etc/apache2/apache2.conf --> edit the file and add the below line
+
+ServerName zabbix.example.com
+
+sudo systemctl restart apache2
+
+sudo ufw allow proto tcp from any to any port 80,443
+
+sudo ufw enable
+
+sudo ufw allow ssh
+
+
+Step 2: Install MariaDB Database server
+****************************************
+
+sudo apt install mariadb-server
+
+sudo mysql_secure_installation
+
+sudo mysql -u root
+
+UPDATE mysql.user SET plugin = 'mysql_native_password' WHERE User = 'root';
+FLUSH PRIVILEGES;
+
+
+export zabbix_db_pass="StrongPassword"  --> your passwd
+
+QUIT;
+
+mysql -uroot -p
+
+create database zabbix character set utf8 collate utf8_bin;
+
+grant all privileges on zabbix.* to zabbix@'localhost' identified by 'PASSWD';   ---> give your passwd(1)
+
+ FLUSH PRIVILEGES;
+ 
+ QUIT;
+ 
+ Step 3: Install Zabbix 5.0 Server on Ubuntu 18.04
+ **************************************************
+ 
+zabbix.com/zabbix/5.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_5.0-1+bionic_all.deb
+sudo apt install ./zabbix-release_5.0-1+bionic_all.deb
+
+sudo apt update
+sudo apt install zabbix-server-mysql zabbix-frontend-php zabbix-apache-conf zabbix-agent    --->  give yes
+
+
+
+ sudo su
+ 
+ zcat /usr/share/doc/zabbix-server-mysql/create.sql.gz | mysql -uzabbix -p zabbix  ---> give your passwd(1)
+ 
+ vi /etc/zabbix/zabbix_server.conf  --> edit the file and add the below lines
+ 
+ DBName=zabbix
+DBUser=zabbix
+DBPassword=StrongPassword (your passwd)
+
+sudo systemctl restart zabbix-server zabbix-agent apache2
+sudo systemctl enable zabbix-server zabbix-agent apache2
+
+vim /etc/zabbix/apache.conf  --> edit the file and add the below lines
+
+php_value date.timezone asia/kolkata   
+
+vi /etc/zabbix/zabbix_agentd.conf  --> edit the file and add the below lines
+
+Hostname=zabbix.server.com
+
+sudo ufw allow proto tcp from any to any port 10050,10051
+
+sudo systemctl restart apache2
+
+http://(Zabbix server’s hostname or IP address)/zabbix/
+
+http://192.168.29.20/zabbix/
+
+login
+*****
+
+Username: "Admin"
+Password: "zabbix"
+
+NODE CONNECTION
+****************
+
+centos-7
+*********
+
+step1: https://www.itzgeek.com/how-tos/linux/centos-how-tos/how-to-install-zabbix-agent-on-centos-7-ubuntu-16-04-debian-8.html
+
+rpm -ivh https://repo.zabbix.com/zabbix/4.0/rhel/7/x86_64/zabbix-release-4.0-1.el7.noarch.rpm
+
+yum install -y zabbix-agent
+
+vi /etc/zabbix/zabbix_agentd.conf --> edit the file and add the below lines
+
+Server=192.168.1.10 --> zabbix server ip
+Hostname=Server2 --> node host name
+
+service zabbix-agent restart
+
+systemctl enable zabbix-agent
+
+systemctl restart zabbix-agent
+
+
+ubuntu-18.04
+*************
+
+step1: link:https://tecadmin.net/install-zabbix-agent-on-ubuntu-and-debian/
+step2: link:https://www.linuxtechi.com/add-linux-host-zabbix-server-for-monitoring/
+
+wget https://repo.zabbix.com/zabbix/4.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_4.0-3+bionic_all.deb
+sudo dpkg -i zabbix-release_4.0-3+bionic_all.deb
+
+sudo apt-get update
+sudo apt-get install zabbix-agent
+
+vi /etc/zabbix/zabbix_agentd.conf --> edit the file and add the below lines
+
+#Server=[zabbix server ip]
+#Hostname=[Hostname of client system ]
+
+Server=192.168.1.10 --> zabbix server ip
+Hostname=Server2 --> node host name
+
+sudo systemctl enable zabbix-agent 
+sudo systemctl start zabbix-agent 
+
+Windows-node
+************
+
+step1:https://www.zabbix.com/download_agents?version=5.0+LTS&release=5.0.10&os=Windows&os_version=Any&hardware=amd64&encryption=OpenSSL&packaging=MSI
+download the .exe form the above link
+Install the file for it will ask the zabbix server ip (zabbix-server ip)
+step2:https://www.ait.com/tech-corner/11491-how-to-setup-zabbix-agent-on-windows
+use the step2 to configure data in zabbix server.
+
+ERROR
+*****
+Get value from agent failed: ZBX_TCP_READ() failed: [104] Connection reset by peer
+
+--> check the windows zabbix-agent conf file "zabbix_agentd.win.conf" server ip is correct or not
