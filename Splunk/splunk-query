@@ -29,3 +29,29 @@ memory
 
 | mstats max(Memory.%_Committed_Bytes_In_Use) as memory Where "index"="em_metrics" AND NOT "host"="rdp1"  span=50s by host | where memory > 50
 
+Disk
+*****
+| mstats max(LogicalDisk.%_Free_Space) as diskwin Where "index"="em_metrics" AND NOT "host"="rdp1"  span=50s by host | where diskwin > 50
+
+| mstats max(df.used) as diskcen Where "index"="em_metrics" AND NOT "host"="rundeckubuntunode.zippyops.com" span=50s by host | where diskcen > 50
+
+| mstats max(df.used) as diskubu Where "index"="em_metrics" AND NOT "host"="rundeckcentosnode.zippyops.com" span=50s by host | where diskubu > 50
+
+I/O
+****
+
+| mstats max(PhysicalDisk.%_Disk_Write_Time) as iowin Where "index"="em_metrics" AND NOT "host"="rdp1"  span=50s by host | where iowin > 50
+
+| mstats max(disk.io_time.io_time) as iocen Where "index"="em_metrics" AND NOT "host"="rundeckubuntunode.zippyops.com" span=50s by host | where iocen > 50
+
+| mstats max(disk.io_time.io_time) as ioubu Where "index"="em_metrics" AND NOT "host"="rundeckcentosnode.zippyops.com" span=50s by host | where ioubu > 50
+
+Network
+*******
+
+| mstats max(Network_Interface.Packets_Received/sec) as netwin Where "index"="em_metrics" AND NOT "host"="rdp1"  span=50s by host | where netwin > 50
+
+| mstats max(interface.packets.rx) as netcen Where "index"="em_metrics" AND NOT "host"="rundeckubuntunode.zippyops.com" span=50s by host | where netcen > 50
+
+| mstats max(interface.packets.rx) as netubu Where "index"="em_metrics" AND NOT "host"="rundeckcentosnode.zippyops.com" span=50s by host | where netubu > 50
+
