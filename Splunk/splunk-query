@@ -70,10 +70,14 @@ centos
 *******
 | mstats max(processmon.cpu.user_time) as top5cpu prestats=false Where "index"="em_metrics" AND "host"="rundeckcentosnode.zippyops.com" span=10s BY process_name | sort by -top5cpu where max in top5 limit=5
 | append
-[ | mstats max(cpu.user) as cpu Where "index"="em_metrics" AND "host"="rundeckcentosnode.zippyops.com" span=50s by host  | where cpu > 20 ]
+[ | mstats max(cpu.user) as cpu Where "index"="em_metrics" AND "host"="rundeckcentosnode.zippyops.com" span=50s by host  | where cpu > 50 ]
 
 ubuntu
 *******
+| mstats max(processmon.cpu.user_time) as top5cpu prestats=false Where "index"="em_metrics" AND "host"="rundeckubuntunode.zippyops.com" span=10s BY process_name | sort by -top5cpu where max in top5 limit=5
+| append
+[ | mstats max(cpu.user) as cpu Where "index"="em_metrics" AND "host"="rundeckubuntunode.zippyops.com" span=50s by host  | where cpu > 50 ]
+
 
 windows
 ********
