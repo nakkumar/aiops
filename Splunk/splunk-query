@@ -64,5 +64,7 @@ sourcetype="web_ping" `website_monitoring_search_index` title="192.168.2.24" | t
 
 sourcetype="web_ping" `website_monitoring_search_index` title="192.168.3.10" | timechart avg(total_time) as response_time | eval response_time_over_threshold=if(response_time>`response_time_threshold`,response_time,0) | eval response_time=if(response_time>`response_time_threshold`,0,response_time) | where response_time > 1
 
-
+top5cpu
+********
+| mstats max(processmon.cpu.user_time) as top5cpu prestats=false Where "index"="em_metrics" AND "host"="rundeckcentosnode.zippyops.com" span=10s BY process_name | sort by -top5cpu where max in top5 limit=5
 
