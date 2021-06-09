@@ -66,5 +66,14 @@ sourcetype="web_ping" `website_monitoring_search_index` title="192.168.3.10" | t
 
 top5cpu
 ********
+centos
+*******
 | mstats max(processmon.cpu.user_time) as top5cpu prestats=false Where "index"="em_metrics" AND "host"="rundeckcentosnode.zippyops.com" span=10s BY process_name | sort by -top5cpu where max in top5 limit=5
+| append
+[ | mstats max(cpu.user) as cpu Where "index"="em_metrics" AND "host"="rundeckcentosnode.zippyops.com" span=50s by host  | where cpu > 20 ]
 
+ubuntu
+*******
+
+windows
+********
