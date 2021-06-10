@@ -81,3 +81,6 @@ ubuntu
 
 windows
 ********
+source="Perfmon:windows-cpu" index="windows1" host="SPLUNK-WIN2012" | top limit=6 instance
+| append
+[ | mstats max(Processor.%_Processor_Time) as cpu Where "index"="em_metrics" AND "host"="SPLUNK-WIN2012"  span=50s by host | where cpu > 5 ]
