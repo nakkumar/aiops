@@ -13,3 +13,10 @@ mstat="em_metrics"
 
 | rest /services/server/status count=0 splunk_server=* | dedup splunk_server | table splunk_server
 
+
+search - windows
+*****************
+
+source="Perfmon:windows-cpu" index="windows1"
+source="Perfmon:windows-system" index="windows1"
+source="Perfmon:windows-memory" index="windows1"
