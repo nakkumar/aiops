@@ -90,3 +90,14 @@ top5mem
 win
 ***
 index=* tag=process tag=report host="SPLUNK-WIN2012" | stats max(process_mem_used) BY process_name | top limit=5 process_name
+
+
+top5io
+*******
+
+sudo vi /etc/crontab
+
+
+index=main host="rundeckubuntunode.zippyops.com" source="/opt/splunkforwarder/top5/top5io"
+
+index=main host="rundeckcentosnode.zippyops.com" source="/opt/splunkforwarder/top5/top5io"
