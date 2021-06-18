@@ -1,3 +1,16 @@
+CUSTOM-SCRIPT
+**************
+
+WINDOWS
+********
+
+
+
+
+
+
+
+
 splunk_server
 *************
 [root@splunk bin]# cat /opt/splunk/etc/apps/Splunk_TA_nix/bin/check-cpu.sh
