@@ -4,9 +4,18 @@ CUSTOM-SCRIPT
 WINDOWS
 ********
 
+step1: script lcation --> C:\Program Files\SplunkUniversalForwarder\bin\scripts   test.ps1--> Write-Host "Hello, World!"
+step2: make entry --> C:\Program Files\SplunkUniversalForwarder\etc\apps\SplunkUniversalForwarder\local\inputs.conf
 
+[powershell://Processes-EX2]
+script = . "$SplunkHome\bin\scripts\top5io.ps1"
+schedule = */1 * * * *
+sourcetype = top5io
 
+step3: restart the splunkforwarder
 
+linux
+*****
 
 
 
