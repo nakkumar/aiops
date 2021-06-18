@@ -16,8 +16,25 @@ step3: restart the splunkforwarder
 
 linux
 *****
+step1: put your custom script --> /opt/splunkforwarder/bin/scripts/top5io.sh
 
+#!/bin/bash
+sudo iotop -botqqq --iter=10 | awk '{ print $13 }' > /tmp/iodata
+sleep 3
+name=$(cat /tmp/iodata | head -n 5 | awk  'BEGIN { ORS="," } { print }')
+#name2=top5io=$name
+echo "top5io=$name"
 
+step2: put the entry -->  /opt/splunkforwarder/etc/apps/SplunkUniversalForwarder/local/inputs.conf
+
+[script://$SPLUNK_HOME/bin/scripts/top5io.sh]
+index = main
+source = top5io
+sourcetype = top5io
+disabled = false
+interval = 30
+
+step3: restart the splunkforwarder
 
 
 splunk_server
