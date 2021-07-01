@@ -43,6 +43,14 @@ step9: chmod 600 /etc/postfix/sasl_passwd*
 step10: systemctl enable postfix --now
 
 
+addition (sending data is too big) --> exec below cmd
+*********
+error:send-mail: fatal: root(0): message file too big
+
+sudo postconf -e mailbox_size_limit=0
+sudo postconf -e message_size_limit=0
+
+
 Testing
 *******
 
