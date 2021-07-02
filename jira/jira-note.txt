@@ -1,0 +1,7 @@
+jira licence
+*************
+
+jira licence --> https://my.atlassian.com/license/evaluation
+jira licence past --> http://192.168.2.18:8080/plugins/servlet/applications/versions-licenses
+rundeck --> https://marketplace.atlassian.com/apps/1219585/rundeck-triggers-rundeck-job-from-issue?hosting=server&tab=overview
+cmd --> https://marketplace.atlassian.com/apps/6398/jira-command-line-interface-cli?hosting=cloud&tab=overview
