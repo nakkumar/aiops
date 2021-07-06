@@ -1,0 +1,20 @@
+yum install wkhtmltopdf
+
+error-->  after the installation, perform the operation, if prompted "wkhtmltopdf: can not connect to X server" error
+follow the below step
+
+yum install xorg-x11-server-Xvfb
+
+create the file and past the below line --> sudo vi /usr/bin/wkhtmltopdf.sh
+  
+xvfb-run -a --server-args="-screen 0, 1024x768x24" /usr/bin/wkhtmltopdf -q $*
+
+chmod a+x /usr/bin/wkhtmltopdf.sh
+ln -s /usr/bin/wkhtmltopdf.sh /usr/local/bin/wkhtmltopdf
+
+
+
+
+/usr/bin/wkhtmltopdf.sh https://www.programmersought.com/article/43701543864/ test2.pdf
+
+
