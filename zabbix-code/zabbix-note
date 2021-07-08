@@ -25,3 +25,11 @@ vi /etc/zabbix/zabbix_agentd.conf
 #
 # Mandatory: no
 EnableRemoteCommands=1
+
+
+
+log-file monitoring condition
+******************************
+last(/centos/log[/var/log/messages,Stopped])>1 --> convert like below
+length(last(/centos/log[/var/log/messages,Stopped]))>1
+
