@@ -1,1 +1,2 @@
+log --> tail -f /var/log/ossim/monit.log
 /etc/init.d/openvas-scanner restart
