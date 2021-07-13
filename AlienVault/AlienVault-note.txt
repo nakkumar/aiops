@@ -1,2 +1,8 @@
+Vulnerability Scan Failed: Service Temporarily Down
+****************************************************
+redis-check-aof --fix /var/lib/redis/appendonly-openvas.aof
+dpkg --configure -a --force-confnew
+
+
 log --> tail -f /var/log/ossim/monit.log
 /etc/init.d/openvas-scanner restart
