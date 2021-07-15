@@ -1,0 +1,6 @@
+cat /opt/atlassian/jira/work/catalina.pid
+20798
+
+sudo /etc/init.d/jira status
+sudo /etc/init.d/jira start
+sudo /etc/init.d/jira stop
