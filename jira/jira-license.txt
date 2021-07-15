@@ -1,4 +1,4 @@
-jira licence
+jira license
 *************
 
 jira licence --> https://my.atlassian.com/license/evaluation
