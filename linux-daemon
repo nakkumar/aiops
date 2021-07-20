@@ -1,0 +1,31 @@
+linux-daemon-service-creation
+******************************
+
+step1: create a shell file and give a 777 permission
+
+root@django:/etc/daemon# cat /etc/daemon/test.sh
+
+#!/bin/sh
+while true; do
+time=$(date +%s)
+  touch /etc/daemon/test_$time;
+  sleep 10;
+done
+
+
+step2: vi /etc/systemd/system/test.service   --> create a file and give a details 
+
+root@django:/etc/systemd/system# cat test.service
+
+[Unit]
+Description=test Daemon
+
+[Service]
+ExecStart=/etc/daemon/test.sh
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+
+
+step3: systemctl start test.service   &&  systemctl enable test.service
