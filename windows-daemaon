@@ -1,0 +1,11 @@
+Start-Job -FilePath C:\Program Files\ClamAV\scan.ps1
+
+
+
+do{
+
+cd "C:\Program Files\ClamAV"
+.\clamscan.exe --log=FILE C:\Users\Administrator\Downloads
+
+    start-sleep -Seconds 30
+}until($infinity)
