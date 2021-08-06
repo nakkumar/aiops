@@ -1,5 +1,7 @@
 vi /etc/sudoers 
 test ALL=(ALL) NOPASSWD: /bin/systemctl restart httpd   --> this command only exec by the user test
 
-***
-
+Restrict sudo Users Running Specific Commands 
+**********************************************
+test ALL=(ALL)      NOPASSWD: ALL
+test ALL=!/bin/systemctl restart httpd --> this command cannot exec by the user test
