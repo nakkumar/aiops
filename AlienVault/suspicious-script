@@ -1,0 +1,68 @@
+centos
+*******
+#!/bin/sh
+
+ cat /var/ossec/logs/alerts/alerts.log | grep 'Web server 400 error code.*centos-node' >  /tmp/logfile/suspicious_centos_after
+ msg=$(tail -1 /tmp/logfile/suspicious_centos_after)
+ if  cmp -s /tmp/logfile/suspicious_centos_after /tmp/logfile/suspicious_centos_before
+ then
+         {
+             echo "NO NEW LOGS"
+             exit 0
+     }
+else
+        {
+
+             cp /tmp/logfile/suspicious_centos_after /tmp/logfile/suspicious_centos_before
+              echo "Suspicious log Alert --> $msg" | mail -s "Centos AlienVault Suspicious log Alert" admin@zippyops.in
+              echo "Suspicious log LOG"
+
+        }
+
+fi
+
+ubuntu
+*******
+#!/bin/sh
+
+ cat /var/ossec/logs/alerts/alerts.log | grep 'Web server 400 error code.*ubuntu-node' >  /tmp/logfile/suspicious_ubuntu_after
+ msg=$(tail -1 /tmp/logfile/suspicious_ubuntu_after)
+ if  cmp -s /tmp/logfile/suspicious_ubuntu_after /tmp/logfile/suspicious_ubuntu_before
+ then
+         {
+             echo "NO NEW LOGS"
+             exit 0
+     }
+else
+        {
+
+             cp /tmp/logfile/suspicious_ubuntu_after /tmp/logfile/suspicious_ubuntu_before
+              echo "Suspicious log Alert --> $msg" | mail -s "Ubuntu AlienVault Suspicious log Alert" admin@zippyops.in
+              echo "Suspicious log LOG"
+
+        }
+
+fi
+
+windows
+*******
+#!/bin/sh
+
+ cat /var/ossec/logs/alerts/alerts.log | grep 'apache,access_denied.*windows-2012' >  /tmp/logfile/suspicious_windows_after
+ msg=$(tail -1 /tmp/logfile/suspicious_windows_after)
+ if  cmp -s /tmp/logfile/suspicious_windows_after /tmp/logfile/suspicious_windows_before
+ then
+         {
+             echo "NO NEW LOGS"
+             exit 0
+     }
+else
+        {
+
+             cp /tmp/logfile/suspicious_windows_after /tmp/logfile/suspicious_windows_before
+              echo "Suspicious log Alert --> $msg" | mail -s "Windows AlienVault Suspicious log Alert" admin@zippyops.in
+              echo "Suspicious log LOG"
+
+        }
+
+fi
