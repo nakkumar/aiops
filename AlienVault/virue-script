@@ -1,0 +1,130 @@
+centos
+*******
+#!/bin/sh
+#  touch /tmp/centos_after1
+#  touch /tmp/centos_before1
+#touch /etc/aiops/virus/one.txt
+# sudo  tail
+ cp /var/ossec/logs/archives/archives.log  /tmp/centos_after1
+ msg=$(tail  /tmp/centos_after1)
+ error=$(tail -100 /tmp/centos_after1 | grep 'rundeckcentosnode.*Eicar-Signature' | wc -l)
+ virus=$(tail -100 /tmp/centos_after1 | grep 'rundeckcentosnode.*Eicar-Signature')
+ if  cmp -s /tmp/centos_after1 /tmp/centos_before1
+ then
+         {
+             echo "NO NEW LOGS"
+             exit 0
+     }
+else
+        {
+
+        if (( $error>=1 ));then
+
+           {
+             echo "VIRUS FOUND"
+              cp /tmp/centos_after1 /tmp/centos_before1
+              echo "virus Alert --> $virus" | mail -s "centos machine virus Alert" admin@zippyops.in
+              touch /etc/aiops/virus/centos.txt
+             exit 2
+     }
+
+    else
+            {
+
+             echo "NO VIRUS"
+              cp /tmp/centos_after1 /tmp/centos_before1
+
+             exit 1
+
+            }
+    fi
+        }
+fi
+
+ubuntu
+******
+#!/bin/sh
+#  touch /tmp/ubuntu_after1
+#  touch /tmp/ubuntu_before1
+#touch /etc/aiops/virus/one.txt
+# sudo  tail
+ cp /var/ossec/logs/archives/archives.log  /tmp/ubuntu_after1
+ msg=$(tail  /tmp/ubuntu_after1)
+ error=$(tail -100 /tmp/ubuntu_after1 | grep 'rundeckubuntunode.*Eicar-Signature' | wc -l)
+ virus=$(tail -100 /tmp/ubuntu_after1 | grep 'rundeckubuntunode.*Eicar-Signature')
+ if  cmp -s /tmp/ubuntu_after1 /tmp/ubuntu_before1
+ then
+         {
+             echo "NO NEW LOGS"
+             exit 0
+     }
+else
+        {
+
+        if (( $error>=1 ));then
+
+           {
+             echo "VIRUS FOUND"
+              cp /tmp/ubuntu_after1 /tmp/ubuntu_before1
+              echo "virus Alert --> $virus" | mail -s "ubuntu machine virus Alert" admin@zippyops.in
+              touch /etc/aiops/virus/ubuntu.txt
+             exit 2
+     }
+
+    else
+            {
+
+             echo "NO VIRUS"
+              cp /tmp/ubuntu_after1 /tmp/ubuntu_before1
+
+             exit 1
+
+            }
+    fi
+        }
+fi
+
+windows
+********
+#!/bin/sh
+# mkdir /home/$(whoami)/log
+#  touch /tmp/data_after1
+#  touch /tmp/data_before1
+#touch /etc/aiops/virus/one.txt
+# sudo  tail
+cp /var/ossec/logs/archives/archives.log  /tmp/data_after1
+ msg=$(tail  /tmp/data_after1)
+ error=$(tail -100 /tmp/data_after1 | grep   'windows-2012.*Eicar-Signature' | wc -l)
+ virus=$(tail -100 /tmp/data_after1 | grep   'windows-2012.*Eicar-Signature')
+ if  cmp -s /tmp/data_after1 /tmp/data_before1
+ then
+         {
+             echo "NO NEW LOGS"
+             exit 0
+     }
+else
+        {
+
+        if (( $error>=1 ));then
+
+           {
+             echo "VIRUS FOUND"
+              cp /tmp/data_after1 /tmp/data_before1
+              echo "virus Alert --> $virus" | mail -s "windows machine virus Alert" admin@zippyops.in
+              touch /etc/aiops/virus/one.txt
+             exit 2
+     }
+
+    else
+            {
+
+             echo "NO VIRUS"
+              cp /tmp/data_after1 /tmp/data_before1
+
+             exit 1
+
+            }
+    fi
+        }
+fi
+#eod
