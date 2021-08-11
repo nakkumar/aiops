@@ -1,0 +1,8 @@
+sudo auditctl -w /var/log/test/test1 -p wrxa -k test1_filter
+--> /var/log/test/test1 = file to monitor 
+--> test1_filter = identification key for filter
+--> wrxa = monitor read,write,execute and append 
+
+cat /var/log/audit/audit.log  --> store all activity in the log file
+
+ausearch -f /var/log/test/test1
