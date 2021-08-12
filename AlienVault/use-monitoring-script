@@ -24,4 +24,49 @@ else
 fi
 
 
+ubuntu
+*******
+#!/bin/sh
 
+ cat /var/ossec/logs/archives/archives.log | grep 'ubuntu-node.*success=no' >  /tmp/logfile/use_ubuntu_after
+ num=$(tail -1 /tmp/logfile/use_ubuntu_after | awk '{print $8}' | perl -nle 'print $1 if /'audit'.*?(\d+)/')
+ if  cmp -s /tmp/logfile/use_ubuntu_after /tmp/logfile/use_ubuntu_before
+ then
+         {
+             echo "NO NEW LOGS"
+             exit 0
+     }
+else
+        {
+                        msg=$(cat /var/ossec/logs/archives/archives.log | grep $num)
+
+             cp /tmp/logfile/use_ubuntu_after /tmp/logfile/use_ubuntu_before
+              echo "Acceptable Use monitoring Alert --> $msg" | mail -s "Ubuntu AlienVault Acceptable Use monitoring Alert" admin@zippyops.in
+              echo "Acceptable Use monitoring LOG"
+
+        }
+
+fi
+
+windows
+********
+#!/bin/sh
+
+cat /var/ossec/logs/alerts/alerts.log | grep 'Windows audit failure event.*windows-2012' >  /tmp/logfile/use_windows_after
+ msg=$(tail -1 /tmp/logfile/use_windows_after)
+ if  cmp -s /tmp/logfile/use_windows_after /tmp/logfile/use_windows_before
+ then
+         {
+             echo "NO NEW LOGS"
+             exit 0
+     }
+else
+        {
+
+             cp /tmp/logfile/use_windows_after /tmp/logfile/use_windows_before
+              echo "Acceptable Use monitoring Alert --> $msg" | mail -s "Windows AlienVault Acceptable Use monitoring  Alert" admin@zippyops.in
+              echo "Acceptable Use monitoring LOG"
+
+        }
+
+fi
